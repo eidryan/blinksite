@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=MuseoModerno:ital,wght@0,200..800;1,200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --cream: #FDFAF4;
+    --dark: #212121;
+    --orange: #FF6A00;
+    --gold: #FFA52E;
+    --red: #F21A1A;
+    --dark-red: #C81010;
+    --mid-orange: #FF8A1C;
+    --scroll-velocity: 0;
+  }
+
+  body {
+    @apply font-body text-dark bg-dark overflow-x-hidden antialiased;
+    /* initial background is dark, will be transitioned by GSAP */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-[-0.03em];
+  }
+}
+
+@layer utilities {
+  .brand-gradient {
+    /* Set default angle via custom property, allowing JS to override */
+    --gradient-angle: 135deg;
+    background: linear-gradient(var(--gradient-angle), #FFA52E 0%, #FF6A00 50%, #F21A1A 100%);
+    background-size: 200% auto;
+    transition: background-position 0.3s ease;
+  }
+
+  .brand-gradient:hover {
+    background-position: right center;
+  }
+
+  .brand-gradient-text {
+    @apply brand-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .brand-gradient-divider {
+    @apply h-[2px] w-full brand-gradient;
+    /* Hook for Origami unfolding animation driven by GSAP */
+    transform-origin: center;
+    transform: perspective(400px) rotateY(90deg) scaleX(0);
+  }
+
+  .glass-panel {
+    @apply bg-white/4 border border-white/8 backdrop-blur-md rounded-2xl;
+  }
+
+  .clip-text-wrap {
+    @apply overflow-hidden inline-block;
+  }
+
+  .clip-text-inner {
+    @apply inline-block;
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(30px);
+  }
+}
+
+/* Base Lenis Smooth Scroll Setup */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* Noise overlay */
+.noise-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.03;
+  mix-blend-mode: multiply;
+}

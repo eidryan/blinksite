@@ -54,12 +54,24 @@ function App() {
     // --------------------------------------------------------
     // Loading Sequence Animation
     // --------------------------------------------------------
+    const finishLoading = () => {
+      setLoading(false);
+      ScrollTrigger.refresh();
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.dispatchEvent(new CustomEvent('loaderComplete'));
+        });
+      });
+    };
+
+    // Safety fallback: always reveal content after 2.5s even if GSAP fails
+    const fallbackTimer = setTimeout(finishLoading, 2500);
+
     if (loaderStarRef.current && loaderBgRef.current) {
       const tl = gsap.timeline({
         onComplete: () => {
-          setLoading(false);
-          // Let GSAP ScrollTriggers initialize on visible content
-          ScrollTrigger.refresh();
+          clearTimeout(fallbackTimer);
+          finishLoading();
         }
       });
       // Sequence: scale star up, fade in

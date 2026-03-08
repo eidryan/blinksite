@@ -52,7 +52,7 @@ function App() {
     gsap.ticker.lagSmoothing(0);
 
     // --------------------------------------------------------
-    // Loading Sequence Animation
+    // Loading Sequence Animation (The Master's Crease)
     // --------------------------------------------------------
     const finishLoading = () => {
       setLoading(false);
@@ -64,22 +64,29 @@ function App() {
       });
     };
 
-    // Safety fallback: always reveal content after 2.5s even if GSAP fails
-    const fallbackTimer = setTimeout(finishLoading, 2500);
+    const fallbackTimer = setTimeout(finishLoading, 4000); // Extended for complex sequence
 
     if (loaderStarRef.current && loaderBgRef.current) {
+      const thread = document.getElementById('loader-thread');
       const tl = gsap.timeline({
         onComplete: () => {
           clearTimeout(fallbackTimer);
           finishLoading();
         }
       });
-      // Sequence: scale star up, fade in
-      tl.to(loaderStarRef.current, { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' })
-        // Translate up to navbar area while shrinking
-        .to(loaderStarRef.current, { y: '-40vh', scale: 0.5, duration: 0.8, ease: 'power3.inOut' })
-        // Fade out overlay
-        .to(loaderBgRef.current, { opacity: 0, duration: 0.4 }, "-=0.2");
+      
+      // The Master's Crease Sequence
+      // 1. Thread slices across
+      tl.to(thread, { width: '200px', duration: 0.8, ease: 'power4.inOut' })
+        // 2. Thread pauses and pulses
+        .to(thread, { height: '2px', boxShadow: '0 0 20px #FF6A00', duration: 0.2 })
+        .to(thread, { opacity: 0, duration: 0.2, delay: 0.2 })
+        // 3. Star takes over, already scaled down, and unfolds
+        .fromTo(loaderStarRef.current, { scale: 0.1, rotationY: 90 }, { scale: 1.5, rotationY: 0, opacity: 1, duration: 1.2, ease: 'elastic.out(1, 0.5)' }, "-=0.2")
+        // 4. Shrink and lock to Navbar
+        .to(loaderStarRef.current, { y: '-40vh', x: '-40vw', scale: 0.5, duration: 1.2, ease: 'power3.inOut' }, "+=0.4")
+        // 5. Fade out overlay
+        .to(loaderBgRef.current, { opacity: 0, duration: 0.6 }, "-=0.4");
     }
 
     // --------------------------------------------------------
@@ -212,10 +219,13 @@ function App() {
       {loading && (
         <div
           ref={loaderBgRef}
-          className="fixed inset-0 z-[100] bg-dark flex items-center justify-center brand-gradient pointer-events-none"
+          className="fixed inset-0 z-[100] bg-dark flex flex-col items-center justify-center brand-gradient pointer-events-none"
         >
-          {/* Overriding gradient visually, just mixing dark background */}
           <div className="absolute inset-0 bg-dark/95"></div>
+          
+          {/* The Master's Crease Thread */}
+          <div id="loader-thread" className="relative z-10 h-[1px] w-0 brand-gradient opacity-100 mb-4"></div>
+          
           <div ref={loaderStarRef} className="relative z-10 opacity-0 scale-50">
             <OrigamiStar className="w-16 h-16 main-loader-star" />
           </div>
@@ -227,17 +237,22 @@ function App() {
       <ImageHoverEffect />
       <ScrollVelocityReactor />
 
-      {/* Content wrapper */}
+      {/* Blueprint Navigation Overlay */}
+      <div className="blueprint-nav-overlay pointer-events-none"></div>
+
+      {/* Content wrapper with Blueprint 3D context */}
       <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
         <Navbar />
-        <main>
-          <Hero />
-          <Sobre />
-          <ComoAtuamos />
-          <Portfolio />
-          <Fundadores />
-        </main>
-        <Footer />
+        <div id="blueprint-wrapper" className="blueprint-wrapper w-full h-full preserve-3d">
+          <main>
+            <Hero />
+            <Sobre />
+            <ComoAtuamos />
+            <Portfolio />
+            <Fundadores />
+          </main>
+          <Footer />
+        </div>
       </div>
     </>
   );

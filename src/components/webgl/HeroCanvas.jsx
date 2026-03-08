@@ -40,18 +40,19 @@ void main() {
       float d = sdBox(gl_FragCoord.xy - rectCenter, rectHalfSize);
       
       // If we are near the text, add light based on mouse proximity
-      if(d < 40.0) {
+      if(d < 80.0) {
           float mouseDist = distance(gl_FragCoord.xy, vec2(uMouse.x * uResolution.x, uMouse.y * uResolution.y));
-          float spotlight = smoothstep(300.0, 0.0, mouseDist);
+          float spotlight = smoothstep(500.0, 0.0, mouseDist); // Wider spotlight
           // Glow intensity
-          lightIntensity = max(lightIntensity, spotlight * smoothstep(40.0, 0.0, d));
+          lightIntensity = max(lightIntensity, spotlight * smoothstep(80.0, -10.0, d));
       }
   }
 
-  // Add the backlight glowing orange
-  finalColor += vec3(1.0, 0.4, 0.0) * lightIntensity * 0.8;
+  // Add the backlight glowing orange/gold
+  vec3 fireGlow = mix(vec3(1.0, 0.2, 0.0), vec3(1.0, 0.6, 0.1), lightIntensity);
+  finalColor += fireGlow * lightIntensity * 2.5;
 
-  gl_FragColor = vec4(finalColor, 0.50 + vFold * 0.14 + lightIntensity * 0.3);
+  gl_FragColor = vec4(finalColor, 0.50 + vFold * 0.14 + lightIntensity * 0.8);
 }
 `;
 

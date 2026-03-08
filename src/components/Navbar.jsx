@@ -4,11 +4,10 @@ import OrigamiStar from './OrigamiStar';
 
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [blueprintOpen, setBlueprintOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            // Transition navbar when past hero (assumed hero is ~100vh)
             if (window.scrollY > window.innerHeight * 0.9) {
                 setIsScrolled(true);
             } else {
@@ -18,6 +17,16 @@ export default function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    const toggleBlueprint = () => {
+        setBlueprintOpen(!blueprintOpen);
+        document.body.classList.toggle('blueprint-active');
+    };
+
+    const closeBlueprint = () => {
+        setBlueprintOpen(false);
+        document.body.classList.remove('blueprint-active');
+    };
 
     const navLinks = [
         { name: 'Sobre', href: '#sobre' },
@@ -30,85 +39,65 @@ export default function Navbar() {
     return (
         <>
             <nav
-                className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-between px-6 py-3 rounded-full transition-all duration-400 ease-in-out w-[90%] max-w-5xl ${isScrolled
+                className={`fixed top-6 left-1/2 -translate-x-1/2 z-[60] flex items-center justify-between px-6 py-3 rounded-full transition-all duration-400 ease-in-out w-[90%] max-w-5xl ${isScrolled || blueprintOpen
                     ? 'bg-[#FDFAF4]/80 backdrop-blur-md text-dark border border-[#FF6A00]/15'
                     : 'bg-transparent text-cream border border-transparent'
                     }`}
             >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 cursor-pointer" onClick={closeBlueprint}>
                     <OrigamiStar className="w-8 h-8" />
                     <span className="font-display font-semibold lowercase text-xl mt-1 tracking-tight">blink</span>
                 </div>
 
-                {/* Desktop Links */}
-                <div className="hidden lg:flex items-center gap-8 font-body font-medium text-sm">
-                    {navLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            data-cursor="link"
-                            className="hover:text-orange transition-colors"
-                        >
-                            {link.name}
-                        </a>
-                    ))}
-                </div>
-
-                {/* Desktop CTA */}
-                <div className="hidden lg:block">
-                    <a
-                        href="#contato"
-                        data-cursor="action"
-                        className="brand-gradient text-dark font-body font-semibold text-sm px-6 py-2.5 rounded-full hover:scale-105 transition-transform inline-block relative overflow-hidden group"
-                        onMouseMove={(e) => {
-                            const rect = e.currentTarget.getBoundingClientRect();
-                            const x = e.clientX - rect.left;
-                            const width = rect.width;
-                            // Map x position linearly from 0deg (left edge) to 135deg (right edge)
-                            const angle = (x / width) * 135;
-                            e.currentTarget.style.setProperty('--gradient-angle', `${angle}deg`);
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.setProperty('--gradient-angle', `135deg`);
-                        }}
-                    >
-                        Fale Conosco
-                    </a>
-                </div>
-
-                {/* Mobile Toggle */}
+                {/* Blueprint Toggle Button */}
                 <button
-                    className="lg:hidden p-2"
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    className="p-2 flex items-center gap-2 group hover:text-orange transition-colors"
+                    onClick={toggleBlueprint}
+                    data-cursor="action"
                 >
-                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    <span className="hidden lg:block font-mono text-xs uppercase tracking-widest mt-1">
+                        {blueprintOpen ? 'Fechar' : 'Explorar'}
+                    </span>
+                    {blueprintOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </nav>
 
-            {/* Mobile Menu Fullscreen Overlay */}
-            {mobileMenuOpen && (
-                <div className="fixed inset-0 z-40 bg-dark text-cream flex flex-col justify-center items-center">
-                    <div className="flex flex-col items-center gap-8 font-display text-4xl">
-                        {navLinks.map((link) => (
+            {/* Blueprint 3D Overlay Navigation */}
+            {blueprintOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-auto" style={{ perspective: '1200px' }}>
+                    <div className="flex flex-col items-center gap-6 lg:gap-10 font-display text-5xl lg:text-7xl"
+                         style={{ transform: 'rotateX(-10deg)', transformStyle: 'preserve-3d' }}>
+                        {navLinks.map((link, i) => (
                             <a
                                 key={link.name}
                                 href={link.href}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="hover:text-orange transition-colors"
+                                onClick={closeBlueprint}
+                                data-cursor="link"
+                                className="text-cream/40 hover:text-orange transition-all duration-500 hover:scale-110 hover:translate-z-10 group relative block"
+                                style={{ 
+                                    animation: `fadeInUp 0.5s ease forwards ${i * 0.1}s`,
+                                    opacity: 0,
+                                    transform: 'translateY(30px) rotateX(10deg)'
+                                }}
                             >
+                                <span className="absolute -left-12 top-1/2 -translate-y-1/2 text-xs font-mono tracking-widest text-cream/20 opacity-0 group-hover:opacity-100 transition-opacity hidden lg:block">
+                                    0{i + 1} —
+                                </span>
                                 {link.name}
                             </a>
                         ))}
-                        <a
-                            href="#contato"
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="mt-8 brand-gradient text-dark font-body font-semibold text-lg px-8 py-4 rounded-full"
-                        >
-                            Fale Conosco
-                        </a>
                     </div>
                 </div>
             )}
+            
+            <style dangerouslySetInnerHTML={{__html: `
+                @keyframes fadeInUp {
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) rotateX(0deg);
+                    }
+                }
+            `}} />
         </>
     );
 }

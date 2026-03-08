@@ -66,28 +66,28 @@ export default function Hero() {
 
                 <h1
                     ref={headlineRef}
-                    className="font-display font-extrabold text-cream text-[2.5rem] lg:text-[7rem] leading-[1.1] mb-8"
-                    style={{ perspective: '1000px', letterSpacing: 'clamp(-0.03em, -0.04em, -0.05em)', textWrap: 'balance' }}
+                    className="font-display font-extrabold text-[2.5rem] lg:text-[8rem] leading-[1.1] mb-8 relative z-20 pointer-events-none"
+                    style={{ perspective: '1000px', letterSpacing: '-0.05em', textWrap: 'balance' }}
                 >
                     {/* Split text for GSAP word-by-word reveal */}
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>Decida</span>
+                    <span className="clip-text-wrap mr-4 lg:mr-8">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(253, 250, 244, 0.15)' }}>Decida</span>
                     </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>em</span>
+                    <span className="clip-text-wrap mr-4 lg:mr-8">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(253, 250, 244, 0.15)' }}>em</span>
                     </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>um</span>
+                    <span className="clip-text-wrap mr-4 lg:mr-8">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(253, 250, 244, 0.15)' }}>um</span>
                     </span>
                     <br className="hidden lg:block" />
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>piscar</span>
+                    <span className="clip-text-wrap mr-4 lg:mr-8">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(253, 250, 244, 0.15)' }}>piscar</span>
                     </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>de</span>
+                    <span className="clip-text-wrap mr-4 lg:mr-8">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(253, 250, 244, 0.15)' }}>de</span>
                     </span>
-                    <span className="clip-text-wrap text-orange">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>olhos.</span>
+                    <span className="clip-text-wrap">
+                        <span className="word-inner clip-text-inner inline-block text-transparent" style={{ transform: 'rotateX(6deg) translateY(30px)', WebkitTextStroke: '2px rgba(255, 106, 0, 0.4)' }}>olhos.</span>
                     </span>
                 </h1>
 

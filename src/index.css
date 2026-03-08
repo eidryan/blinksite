@@ -83,6 +83,38 @@
     transform-origin: top center;
     backface-visibility: hidden;
   }
+
+  .blueprint-wrapper {
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    transform-style: preserve-3d;
+    transform-origin: center center;
+  }
+
+  body.blueprint-active {
+    background-color: #111 !important;
+    overflow: hidden !important;
+  }
+
+  body.blueprint-active .blueprint-wrapper {
+    transform: scale(0.6) rotateX(15deg) rotateY(-15deg) translateZ(-500px);
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .blueprint-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    background: radial-gradient(circle at center, transparent 0%, #111 100%);
+  }
+
+  body.blueprint-active .blueprint-nav-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 /* Base Lenis Smooth Scroll Setup */

@@ -114,72 +114,63 @@ export default function BrandCursor() {
         window.addEventListener('mousedown', onMouseDown);
         window.addEventListener('mouseup', onMouseUp);
 
-        // Mutation Observer to watch for DOM changes and re-bind cursor events
-        const applyHoverHacks = () => {
-            const interactives = document.querySelectorAll('[data-cursor]');
+        // Event Delegation for hover states
+        const onMouseOver = (e) => {
+            const el = e.target.closest('a, button, [data-cursor]');
+            if (!el) return;
 
-            interactives.forEach(el => {
-                // Prevent duplicate listeners
-                if (el.dataset.cursorBound) return;
-                el.dataset.cursorBound = "true";
+            let type = el.getAttribute('data-cursor');
+            if (!type) {
+                if (el.tagName.toLowerCase() === 'a') type = 'link';
+                if (el.tagName.toLowerCase() === 'button') type = 'action';
+            }
 
-                el.addEventListener('mouseenter', () => {
-                    const type = el.getAttribute('data-cursor');
-
-                    if (type === 'link') {
-                        ring.style.width = '60px';
-                        ring.style.height = '60px';
-                        ring.style.background = 'rgba(255, 106, 0, 0.15)';
-                        ring.style.borderRadius = '50%';
-                        dot.style.opacity = '0';
-                        label.textContent = 'Ver';
-                        label.style.opacity = '1';
-                    }
-                    else if (type === 'action') {
-                        ring.style.width = '60px';
-                        ring.style.height = '60px';
-                        ring.style.background = 'var(--brand-gradient-20, rgba(255,106,0,0.2))'; // Approximation for gradient/20
-                        ring.style.borderRadius = '50%';
-                        dot.style.opacity = '0';
-                        label.textContent = 'Abrir';
-                        label.style.opacity = '1';
-                    }
-                    else if (type === 'image') {
-                        ring.style.width = '80px';
-                        ring.style.height = '48px';
-                        ring.style.background = 'rgba(255, 106, 0, 0.15)';
-                        ring.style.borderRadius = '24px'; // morph to rounded rect
-                        dot.style.opacity = '0';
-                        label.textContent = 'Arrastar';
-                        label.style.opacity = '1';
-                    }
-                });
-
-                el.addEventListener('mouseleave', () => {
-                    // Reset to default
-                    ring.style.width = '40px';
-                    ring.style.height = '40px';
-                    ring.style.background = 'transparent';
-                    ring.style.borderRadius = '50%';
-                    dot.style.opacity = '1';
-                    label.style.opacity = '0';
-                });
-
-            });
+            if (type === 'link') {
+                ring.style.width = '60px';
+                ring.style.height = '60px';
+                ring.style.background = 'rgba(255, 106, 0, 0.15)';
+                ring.style.borderRadius = '50%';
+                dot.style.opacity = '0';
+                label.textContent = 'Ver';
+                label.style.opacity = '1';
+            } else if (type === 'action') {
+                ring.style.width = '60px';
+                ring.style.height = '60px';
+                ring.style.background = 'var(--brand-gradient-20, rgba(255,106,0,0.2))';
+                ring.style.borderRadius = '50%';
+                dot.style.opacity = '0';
+                label.textContent = 'Abrir';
+                label.style.opacity = '1';
+            } else if (type === 'image') {
+                ring.style.width = '80px';
+                ring.style.height = '48px';
+                ring.style.background = 'rgba(255, 106, 0, 0.15)';
+                ring.style.borderRadius = '24px';
+                dot.style.opacity = '0';
+                label.textContent = 'Arrastar';
+                label.style.opacity = '1';
+            }
         };
 
-        // Initial bind
-        applyHoverHacks();
+        const onMouseOut = (e) => {
+            const el = e.target.closest('a, button, [data-cursor]');
+            if (!el) return;
 
-        const observer = new MutationObserver((mutations) => {
-            let shouldRebind = false;
-            mutations.forEach((mutation) => {
-                if (mutation.addedNodes.length) shouldRebind = true;
-            });
-            if (shouldRebind) applyHoverHacks();
-        });
+            // Optional: Check if we are actually leaving the element and not going to a child
+            const relatedTarget = e.relatedTarget;
+            if (relatedTarget && el.contains(relatedTarget)) return;
 
-        observer.observe(document.body, { childList: true, subtree: true });
+            // Reset to default
+            ring.style.width = '40px';
+            ring.style.height = '40px';
+            ring.style.background = 'transparent';
+            ring.style.borderRadius = '50%';
+            dot.style.opacity = '1';
+            label.style.opacity = '0';
+        };
+
+        window.addEventListener('mouseover', onMouseOver);
+        window.addEventListener('mouseout', onMouseOut);
 
         // Cleanup
         return () => {
@@ -188,7 +179,8 @@ export default function BrandCursor() {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('mousedown', onMouseDown);
             window.removeEventListener('mouseup', onMouseUp);
-            observer.disconnect();
+            window.removeEventListener('mouseover', onMouseOver);
+            window.removeEventListener('mouseout', onMouseOut);
             ring.remove();
             dot.remove();
         };

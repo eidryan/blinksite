@@ -28,8 +28,8 @@ export default function Fundadores() {
         const percentX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
         const percentY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
         gsap.to(card, {
-            rotateX: percentY * 3,
-            rotateY: percentX * 3,
+            rotateX: percentY * 1.5,
+            rotateY: percentX * 1.5,
             duration: 0.5,
             ease: 'power2.out',
             transformPerspective: 800
@@ -81,7 +81,7 @@ export default function Fundadores() {
                     Quem está por trás.
                 </h2>
 
-                {/* Two-column founder grid */}
+                {/* Founder cards — side-by-side layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     {founders.map((founder, i) => (
                         <div
@@ -89,19 +89,16 @@ export default function Fundadores() {
                             ref={el => cardsRef.current[i] = el}
                             onMouseMove={(e) => handleMouseMove(e, i)}
                             onMouseLeave={() => handleMouseLeave(i)}
-                            className="group will-change-transform"
+                            className="group will-change-transform flex flex-row gap-6 items-start"
                             style={{ transformStyle: 'preserve-3d' }}
                         >
-                            {/* Photo frame */}
-                            <div className="relative rounded-xl overflow-hidden border border-white/10 group-hover:border-orange/20 transition-colors duration-500 bg-[#1A1A1A]">
-                                {/* Brand gradient tab at top */}
-                                <div className="h-[3px] w-full brand-gradient opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
-
-                                {/* Photo with WebGL wrapper */}
+                            {/* Photo — compact */}
+                            <div className="relative rounded-xl overflow-hidden border border-white/10 group-hover:border-orange/20 transition-colors duration-500 bg-[#1A1A1A] shrink-0 w-[140px] lg:w-[180px]">
+                                <div className="h-[2px] w-full brand-gradient opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                                 <div
                                     className="image-canvas-wrapper relative w-full"
                                     data-canvas="image"
-                                    style={{ aspectRatio: '3/4' }}
+                                    style={{ aspectRatio: '1/1' }}
                                 >
                                     <img
                                         src={founder.photo}
@@ -112,8 +109,8 @@ export default function Fundadores() {
                                 </div>
                             </div>
 
-                            {/* Bio */}
-                            <div className="mt-6 px-1">
+                            {/* Bio — more space */}
+                            <div className="flex-1 pt-2">
                                 <h3 className="font-display font-bold text-2xl lg:text-3xl mb-1">
                                     {founder.name}
                                 </h3>

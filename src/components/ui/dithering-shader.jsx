@@ -130,6 +130,7 @@ void main() {
   pixelizedUv -= .5;
 
   vec2 shape_uv = pixelizedUv;
+  shape_uv.x *= u_resolution.x / u_resolution.y;
   vec2 dithering_uv = pxSizeUv;
   vec2 ditheringNoise_uv = uv * u_resolution;
 

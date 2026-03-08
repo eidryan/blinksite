@@ -5,6 +5,7 @@ import OrigamiStar from './OrigamiStar';
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('');
 
     useEffect(() => {
         const handleScroll = () => {
@@ -16,7 +17,23 @@ export default function Navbar() {
             }
         };
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        // ScrollSpy Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        }, { rootMargin: '-30% 0px -70% 0px' });
+
+        const sections = document.querySelectorAll('section[id], footer[id]');
+        sections.forEach(section => observer.observe(section));
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            sections.forEach(section => observer.unobserve(section));
+        };
     }, []);
 
     const navLinks = [
@@ -42,16 +59,23 @@ export default function Navbar() {
 
                 {/* Desktop Links */}
                 <div className="hidden lg:flex items-center gap-8 font-body font-medium text-sm">
-                    {navLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.href}
-                            data-cursor="link"
-                            className="hover:text-orange transition-colors"
-                        >
-                            {link.name}
-                        </a>
-                    ))}
+                    {navLinks.map((link) => {
+                        const sectionId = link.href.substring(1);
+                        const isActive = activeSection === sectionId;
+                        return (
+                            <a
+                                key={link.name}
+                                href={link.href}
+                                data-cursor="link"
+                                className={`relative hover:text-orange py-1 transition-colors ${isActive ? 'text-orange' : ''}`}
+                            >
+                                {link.name}
+                                {isActive && (
+                                    <span className="absolute -bottom-1 left-0 w-full h-[2px] bg-orange rounded-full animate-[underlineSlide_0.3s_ease-out]" />
+                                )}
+                            </a>
+                        );
+                    })}
                 </div>
 
                 {/* Desktop CTA */}
@@ -89,16 +113,20 @@ export default function Navbar() {
             {mobileMenuOpen && (
                 <div className="fixed inset-0 z-40 bg-dark text-cream flex flex-col justify-center items-center">
                     <div className="flex flex-col items-center gap-8 font-display text-4xl">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="hover:text-orange transition-colors"
-                            >
-                                {link.name}
-                            </a>
-                        ))}
+                        {navLinks.map((link) => {
+                            const sectionId = link.href.substring(1);
+                            const isActive = activeSection === sectionId;
+                            return (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className={`relative hover:text-orange transition-colors ${isActive ? 'text-orange' : ''}`}
+                                >
+                                    {link.name}
+                                </a>
+                            );
+                        })}
                         <a
                             href="#contato"
                             onClick={() => setMobileMenuOpen(false)}
@@ -109,6 +137,13 @@ export default function Navbar() {
                     </div>
                 </div>
             )}
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes underlineSlide {
+                    from { transform: scaleX(0); transform-origin: left; }
+                    to { transform: scaleX(1); transform-origin: left; }
+                }
+            `}} />
         </>
     );
 }

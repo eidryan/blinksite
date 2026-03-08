@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import OrigamiStar from './OrigamiStar';
+import { DitheringShader } from './ui/dithering-shader';
 
 export default function Hero() {
     const containerRef = useRef(null);
@@ -9,25 +10,25 @@ export default function Hero() {
     const ctaRef = useRef(null);
 
     useEffect(() => {
-        // Basic GSAP timeline for text reveals
-        const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+        const start = () => {
+            // Basic GSAP timeline for text reveals
+            const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-        // Initial load screen sequence (star scaling) can be handled in App.js or here.
-        // For now we assume the loader finishes and reveals the hero elements.
+            const words = headlineRef.current.querySelectorAll('.word-inner');
 
-        const words = headlineRef.current.querySelectorAll('.word-inner');
+            tl.to(words, {
+                y: 0,
+                clipPath: 'inset(0% 0% 0% 0%)',
+                rotationX: 0,
+                duration: 1.2,
+                stagger: 0.08
+            })
+                .fromTo(subtitleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+                .fromTo(ctaRef.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 }, "-=0.6");
+        };
 
-        tl.to(words, {
-            y: 0,
-            clipPath: 'inset(0% 0% 0% 0%)',
-            rotationX: 0,
-            duration: 1.2,
-            stagger: 0.08,
-            delay: 1.5 // waiting for loader if any
-        }, "-=0.5")
-            .fromTo(subtitleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.8")
-            .fromTo(ctaRef.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 }, "-=0.6");
-
+        window.addEventListener('loaderComplete', start, { once: true });
+        return () => window.removeEventListener('loaderComplete', start);
     }, []);
 
     return (
@@ -36,11 +37,25 @@ export default function Hero() {
             data-theme="dark"
             className="relative min-h-[100dvh] flex flex-col justify-center items-start px-6 lg:px-20 overflow-hidden"
         >
+            <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">        
+                <DitheringShader
+                    width={1920}
+                    height={1080}
+                    shape="ripple"
+                    type="2x2"
+                    colorBack="#330000"
+                    colorFront="#ffff00"
+                    pxSize={2}
+                    speed={1.2}
+                    style={{ width: '100%', height: '100%' }}
+                />
+            </div>
+
             {/* Canvas Mount Point for Prompts 2 */}
-            <div data-canvas="hero" className="absolute inset-0 z-0"></div>
+            <div data-canvas="hero" className="absolute inset-0 z-[1]"></div>
 
             {/* Star Watermark */}
-            <div className="absolute -bottom-[20vw] -left-[10vw] z-0 opacity-[0.03] animate-[spin_180s_linear_infinite]">
+            <div data-speed="0.3" className="absolute -bottom-[20vw] -left-[10vw] z-0 opacity-[0.03] animate-[spin_180s_linear_infinite]">
                 <OrigamiStar className="w-[70vw] h-[70vw]" />
             </div>
 
@@ -52,7 +67,7 @@ export default function Hero() {
                 <h1
                     ref={headlineRef}
                     className="font-display font-extrabold text-cream text-[2.5rem] lg:text-[7rem] leading-[1.1] mb-8"
-                    style={{ perspective: '1000px' }}
+                    style={{ perspective: '1000px', letterSpacing: 'clamp(-0.03em, -0.04em, -0.05em)', textWrap: 'balance' }}
                 >
                     {/* Split text for GSAP word-by-word reveal */}
                     <span className="clip-text-wrap mr-4">
@@ -78,7 +93,7 @@ export default function Hero() {
 
                 <p
                     ref={subtitleRef}
-                    className="font-body text-cream/70 text-lg lg:text-xl max-w-md leading-relaxed mb-12 opacity-0"
+                    className="font-body font-medium text-cream/90 lg:text-cream/70 text-lg lg:text-xl max-w-md leading-relaxed mb-12 opacity-0"
                 >
                     Ferramentas que eliminam o que não deveria existir.
                 </p>
@@ -99,7 +114,7 @@ export default function Hero() {
                         e.currentTarget.style.setProperty('--gradient-angle', `135deg`);
                     }}
                 >
-                    Conheça a Blink <span className="text-xl">↓</span>
+                    Conheça a Blink <span className="text-xl inline-block group-hover:animate-bounce">↓</span>
                 </a>
             </div>
         </section>

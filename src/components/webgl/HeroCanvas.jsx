@@ -1,127 +1,132 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const fragmentShader = `
-// Fragment shader — faceted brand gradient
-varying vec3 vColor;
-varying float vFold;
+// Simplex 2D noise
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+uniform float uTime;
+uniform vec2 uMouse;       // normalized 0-1
 uniform vec2 uResolution;
+uniform float uScrollProgress; // 0-1 through hero
 
 void main() {
-  vec3 color = vColor + vFold * vec3(0.15, 0.08, 0.0);
-
-  vec2 uv = gl_FragCoord.xy / uResolution;
-  vec2 centeredUv = uv - 0.5;
-  centeredUv.x *= uResolution.x / uResolution.y;
-  float vignette = smoothstep(0.0, 0.65, length(centeredUv));
-  vec3 dark = vec3(0.129);
-  vec3 finalColor = mix(color, dark, vignette * 0.55);
-
-  gl_FragColor = vec4(finalColor, 0.50 + vFold * 0.14);
+    vec2 uv = gl_FragCoord.xy / uResolution;
+    
+    // Brand colors
+    vec3 gold   = vec3(1.0, 0.647, 0.18);   // #FFA52E
+    vec3 orange = vec3(1.0, 0.416, 0.0);    // #FF6A00
+    vec3 red    = vec3(0.949, 0.102, 0.102); // #F21A1A
+    
+    // Noise-driven color mixing
+    float n1 = snoise(uv * 3.0 + uTime * 0.08);
+    float n2 = snoise(uv * 5.0 - uTime * 0.12 + 100.0);
+    
+    vec3 color = mix(gold, orange, smoothstep(-0.3, 0.3, n1));
+    color = mix(color, red, smoothstep(-0.2, 0.4, n2));
+    
+    // Mouse proximity: subtle brighten near cursor
+    // Correcting aspect ratio for distance formula to prevent stretching
+    vec2 aspectCorrectedUv = uv;
+    aspectCorrectedUv.x *= uResolution.x / uResolution.y;
+    vec2 aspectCorrectedMouse = uMouse;
+    aspectCorrectedMouse.x *= uResolution.x / uResolution.y;
+    
+    float mouseDist = distance(aspectCorrectedUv, aspectCorrectedMouse);
+    float mouseInfluence = smoothstep(0.4, 0.0, mouseDist);
+    color += mouseInfluence * 0.12;
+    
+    // Heavy vignette to blend into #212121
+    // Keep vignette proportional to screen bounds
+    vec2 centeredUv = uv - 0.5;
+    centeredUv.x *= uResolution.x / uResolution.y;
+    float vignette = smoothstep(0.0, 0.7, length(centeredUv));
+    vec3 dark = vec3(0.129); // #212121
+    color = mix(color, dark, vignette * 0.85);
+    
+    // Low opacity — atmosphere
+    gl_FragColor = vec4(color, 0.20 + mouseInfluence * 0.08);
 }
 `;
 
 const vertexShader = `
 uniform float uTime;
-uniform vec2 uMouse;        // normalized 0-1
-uniform vec2 uResolution;
-uniform float uScrollProgress;  // 0-1
-
-attribute float aPhase;     // per-vertex random phase offset
-attribute vec3 aColor;      // per-vertex brand color
-varying vec3 vColor;
-varying float vFold;
+varying vec2 vUv;
 
 void main() {
-  vColor = aColor;
-  vec3 pos = position;
-
-  // Gentle per-vertex breathing (slow fold oscillation)
-  float breathe = sin(uTime * 0.4 + aPhase) * 0.018;
-  pos.z += breathe;
-
-  vec2 uv = (pos.xy + vec2(1.0)) * 0.5;
-  vec2 aspectMouse = uMouse;
-  aspectMouse.x *= uResolution.x / uResolution.y;
-  vec2 aspectUv = uv;
-  aspectUv.x *= uResolution.x / uResolution.y;
-
-  float dist = distance(aspectUv, aspectMouse);
-  float wave = smoothstep(0.35, 0.0, dist) * 0.14;
-  pos.z += wave * (1.0 - uScrollProgress);
-
-  vFold = wave;
-
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    vUv = uv;
+    vec3 pos = position;
+    // Gentle sine displacement
+    pos.z += sin(pos.x * 2.0 + uTime) * 0.02;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
 }
 `;
 
-function buildOrigamiGeometry(cols, rows) {
-    const positions = [];
-    const colors = [];
-    const phases = [];
-
-    const palette = [
-        [1.0, 0.647, 0.18],   // gold   #FFA52E
-        [1.0, 0.541, 0.11],   // mid    #FF8A1C
-        [1.0, 0.416, 0.0],    // orange #FF6A00
-        [1.0, 0.333, 0.08],   // deep   interpolated
-        [0.949, 0.102, 0.102] // red    #F21A1A
-    ];
-
-    for (let r = 0; r < rows; r++) {
-        for (let c = 0; c < cols; c++) {
-            const x0 = (c / cols) * 2 - 1;
-            const x1 = ((c + 1) / cols) * 2 - 1;
-            const y0 = (r / rows) * 2 - 1;
-            const y1 = ((r + 1) / rows) * 2 - 1;
-
-            const t = ((c / cols) + (r / rows)) / 2;
-            const pi = Math.min(Math.floor(t * (palette.length - 1)), palette.length - 2);
-            const pf = t * (palette.length - 1) - pi;
-            const col = palette[pi].map((v, i) => v + (palette[pi + 1][i] - v) * pf);
-
-            const jitter = () => col.map(v => Math.max(0, Math.min(1, v + (Math.random() - 0.5) * 0.08)));
-            const faceCol = jitter();
-            const phase = Math.random() * Math.PI * 2;
-
-            // Triangle 1
-            positions.push(x0, y0, 0, x1, y0, 0, x0, y1, 0);
-            for (let i = 0; i < 3; i++) { colors.push(...faceCol); phases.push(phase); }
-
-            // Triangle 2
-            positions.push(x1, y0, 0, x1, y1, 0, x0, y1, 0);
-            for (let i = 0; i < 3; i++) { colors.push(...faceCol); phases.push(phase); }
-        }
-    }
-
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
-    geo.setAttribute('aColor', new THREE.BufferAttribute(new Float32Array(colors), 3));
-    geo.setAttribute('aPhase', new THREE.BufferAttribute(new Float32Array(phases), 1));
-    return geo;
-}
-
 export default function HeroCanvas() {
+    const mountRef = useRef(null);
+
     useEffect(() => {
+        // Mobile fallback: No WebGL entirely
         if (window.innerWidth < 1024) return;
+
+        // Wait for the DOM mount point that Prompt 1 created
         const container = document.querySelector('[data-canvas="hero"]');
         if (!container) return;
 
+        // Setup
         const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+        // Using an Orthographic camera because we are just mapping a 2D plane perfectly to screen
+        const camera = new THREE.OrthographicCamera(
+            -1, 1, 1, -1, 0.1, 10
+        );
         camera.position.z = 1;
 
         const renderer = new THREE.WebGLRenderer({
             alpha: true,
-            antialias: false,
+            antialias: false, // Not strictly needed for a blurred shader plane
             powerPreference: 'high-performance'
         });
+
+        const setSize = () => {
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Cap pixel ratio
+            if (material) {
+                material.uniforms.uResolution.value.set(
+                    renderer.domElement.width,
+                    renderer.domElement.height
+                );
+            }
+        };
+
         container.appendChild(renderer.domElement);
 
-        const geometry = buildOrigamiGeometry(24, 16);
+        // Geometry + Material
+        const geometry = new THREE.PlaneGeometry(2, 2, 8, 8); // Subdivided slightly for vertex displacement
         const material = new THREE.ShaderMaterial({
             vertexShader,
             fragmentShader,
@@ -132,45 +137,36 @@ export default function HeroCanvas() {
                 uScrollProgress: { value: 0 }
             },
             transparent: true,
-            depthWrite: false,
-            side: THREE.DoubleSide
+            depthWrite: false
         });
+
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
-        const setSize = () => {
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            material.uniforms.uResolution.value.set(renderer.domElement.width, renderer.domElement.height);
-        };
         setSize();
-        window.addEventListener('resize', setSize);
 
-        const heroSection = document.getElementById('hero');
-        renderer.domElement.style.transition = 'none';
-
-        let isVisible = true;
-        const st = ScrollTrigger.create({
-            trigger: heroSection,
-            start: 'top top',
-            end: 'bottom top',
-            onUpdate: (self) => {
-                renderer.domElement.style.opacity = 1 - self.progress;
-                material.uniforms.uScrollProgress.value = self.progress;
-                isVisible = self.progress < 1;
-            }
-        });
-
+        // Mouse Tracking
         const mouse = { x: 0.5, y: 0.5 };
         const targetMouse = { x: 0.5, y: 0.5 };
+
         const onMouseMove = (e) => {
+            // normalized Y is inverted in webgl coordinate space
             targetMouse.x = e.clientX / window.innerWidth;
             targetMouse.y = 1.0 - (e.clientY / window.innerHeight);
         };
         window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('resize', setSize);
 
+        // Render loop hooked to RAF
         let rafId;
         const clock = new THREE.Clock();
+
+        // Optimization: intersection observer to pause rendering
+        let isVisible = true;
+        const observer = new IntersectionObserver((entries) => {
+            isVisible = entries[0].isIntersecting;
+        });
+        observer.observe(container);
 
         const render = () => {
             rafId = requestAnimationFrame(render);
@@ -179,6 +175,7 @@ export default function HeroCanvas() {
             const delta = clock.getDelta();
             material.uniforms.uTime.value += delta;
 
+            // Lerp mouse for smoother shader reaction
             mouse.x += (targetMouse.x - mouse.x) * 0.05;
             mouse.y += (targetMouse.y - mouse.y) * 0.05;
             material.uniforms.uMouse.value.set(mouse.x, mouse.y);
@@ -187,11 +184,12 @@ export default function HeroCanvas() {
         };
         render();
 
+        // Cleanup
         return () => {
             window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('resize', setSize);
             cancelAnimationFrame(rafId);
-            if (st) st.kill();
+            observer.disconnect();
             if (container.contains(renderer.domElement)) {
                 container.removeChild(renderer.domElement);
             }
@@ -201,5 +199,5 @@ export default function HeroCanvas() {
         };
     }, []);
 
-    return null;
+    return null; // Side-effect component mounting to external DOM node
 }

@@ -41,12 +41,11 @@ export default function ImageHoverEffect() {
         // Mobile fallback: No WebGL entirely
         if (window.innerWidth < 1024) return;
 
-        const wrappers = document.querySelectorAll('.image-canvas-wrapper');
+        const images = document.querySelectorAll('img[data-cursor="image"]');
         const instances = [];
 
-        wrappers.forEach(wrapper => {
-            const img = wrapper.querySelector('img');
-            if (!img) return;
+        images.forEach(img => {
+            const wrapper = img.parentElement;
 
             // Hide real image natively, but keep it in DOM to maintain layout bounds
             img.style.opacity = '0';
@@ -70,9 +69,11 @@ export default function ImageHoverEffect() {
             const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
 
             const textureLoader = new THREE.TextureLoader();
+            textureLoader.setCrossOrigin('anonymous');
             const texture = textureLoader.load(img.src, () => {
-                // Trigger render once loaded
-                render();
+                // Force an immediate render once texture is available (bypass isVisible for initial draw)
+                isTextureLoaded = true;
+                renderOnce();
             });
 
             // Cover exact image bounds
@@ -120,23 +121,27 @@ export default function ImageHoverEffect() {
 
             let isHovered = false;
             let isVisible = false;
+            let isTextureLoaded = false;
+
+            // Always draw at least one frame when visible (regardless of animation state)
+            const renderOnce = () => {
+                updateSize();
+                material.uniforms.uTime.value = clock.getDelta();
+                renderer.render(scene, camera);
+            };
 
             const observer = new IntersectionObserver((entries) => {
                 isVisible = entries[0].isIntersecting;
-                if (isVisible) render(); // Kick off render loop if visible
+                if (isVisible && isTextureLoaded) renderOnce(); // Re-draw when scrolled into view
             });
             observer.observe(wrapper);
 
             const render = () => {
-                if (!isVisible && !isHovered) {
-                    // Optimization: Pause rendering if neither visible nor animated
-                    return;
-                }
+                if (!isHovered) return; // Only loop render for hover animations
 
                 material.uniforms.uTime.value += clock.getDelta();
                 renderer.render(scene, camera);
 
-                // Only loop if we have active animations or mouse is over it
                 if (isHovered || material.uniforms.uChromatic.value > 0.01) {
                     rafId = requestAnimationFrame(render);
                 }

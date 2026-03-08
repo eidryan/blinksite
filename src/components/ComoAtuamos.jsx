@@ -63,12 +63,17 @@ export default function ComoAtuamos() {
                     pin: true,
                     scrub: 1,
                     start: "center center",
-                    end: () => `+=${containerWidth}`,
+                    invalidateOnRefresh: true,
+                    end: () => `+=${cardsContainerRef.current.scrollWidth}`,
                 }
             });
 
             tl.to(cardsContainerRef.current, {
-                x: xToScroll,
+                x: () => {
+                    const scrollW = cardsContainerRef.current.scrollWidth;
+                    const winW = window.innerWidth;
+                    return -(scrollW - winW + 100);
+                },
                 ease: 'none'
             });
 
@@ -102,7 +107,8 @@ export default function ComoAtuamos() {
                     scrollTrigger: {
                         trigger: sectionRef.current,
                         start: "center center",
-                        end: () => `+=${containerWidth}`,
+                        invalidateOnRefresh: true,
+                        end: () => `+=${cardsContainerRef.current.scrollWidth}`,
                         scrub: 1
                     }
                 }

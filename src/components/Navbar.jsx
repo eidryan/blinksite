@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import OrigamiStar from './OrigamiStar';
-
+import logoBranca from '../assets/brand/LogoBlink_Branca.png';
+import logoPreta from '../assets/brand/LogoBlink_Preta.png';
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -53,8 +53,11 @@ export default function Navbar() {
                     }`}
             >
                 <div className="flex items-center gap-3">
-                    <OrigamiStar className="w-8 h-8" />
-                    <span className="font-display font-semibold lowercase text-xl mt-1 tracking-tight">blink</span>
+                    <img
+                        src={isScrolled ? logoPreta : logoBranca}
+                        alt="Blink Logo"
+                        className="h-6 w-auto transition-opacity"
+                    />
                 </div>
 
                 {/* Desktop Links */}

@@ -10,7 +10,7 @@ import ComoAtuamos from './components/ComoAtuamos';
 import Portfolio from './components/Portfolio';
 import Fundadores from './components/Fundadores';
 import Footer from './components/Footer';
-import OrigamiStar from './components/OrigamiStar';
+import brandLogoComplete from './assets/brand/LogoBlink_Completa (1).png';
 
 // Premium Features
 import BrandCursor from './components/BrandCursor';
@@ -76,7 +76,7 @@ function App() {
       // Sequence: scale star up, fade in
       tl.to(loaderStarRef.current, { scale: 1, opacity: 1, duration: 0.6, ease: 'power2.out' })
         // Translate up to navbar area while shrinking
-        .to(loaderStarRef.current, { y: '-40vh', scale: 0.5, duration: 0.8, ease: 'power3.inOut' })
+        .to(loaderStarRef.current, { y: '-40vh', scale: 0.8, duration: 0.8, ease: 'power3.inOut' })
         // Fade out overlay
         .to(loaderBgRef.current, { opacity: 0, duration: 0.4 }, "-=0.2");
     }
@@ -159,8 +159,8 @@ function App() {
         >
           {/* Overriding gradient visually, just mixing dark background */}
           <div className="absolute inset-0 bg-dark/95"></div>
-          <div ref={loaderStarRef} className="relative z-10 opacity-0 scale-50">
-            <OrigamiStar className="w-16 h-16" />
+          <div ref={loaderStarRef} className="relative z-10 opacity-0 scale-50 w-48 md:w-64">
+            <img src={brandLogoComplete} alt="Blink Logo" className="w-full h-auto object-contain" />
           </div>
         </div>
       )}

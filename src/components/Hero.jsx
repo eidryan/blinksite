@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import OrigamiStar from './OrigamiStar';
 import { BayerShader } from './ui/bayer-shader';
 
 export default function Hero() {
@@ -45,10 +44,6 @@ export default function Hero() {
                 />
             </div>
 
-            {/* Star Watermark */}
-            <div data-speed="0.3" className="absolute bottom-10 -right-10 lg:right-10 z-0 opacity-20 pointer-events-none">
-                <OrigamiStar className="w-32 h-32 lg:w-48 lg:h-48" />
-            </div>
 
             <div ref={containerRef} className="relative z-10 max-w-5xl pointer-events-none mt-20">
                 <p className="font-mono text-orange uppercase text-xs lg:text-sm tracking-widest mb-8">

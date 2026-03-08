@@ -103,6 +103,7 @@ export default function Fundadores() {
                                     <img
                                         src={founder.photo}
                                         alt={founder.name}
+                                        crossOrigin="anonymous"
                                         data-cursor="image"
                                         className="absolute inset-0 w-full h-full object-cover"
                                     />

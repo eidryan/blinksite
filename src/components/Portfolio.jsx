@@ -148,9 +148,9 @@ export default function Portfolio() {
                 {/* Ghost Cards */}
                 <div className="w-full lg:w-[70%] mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[1, 2].map(i => (
-                        <div key={i} className="border-2 border-dashed border-dark/10 rounded-[2rem] p-8 flex items-center justify-center bg-dark/5 opacity-40 hover:opacity-60 transition-opacity">
+                        <div key={i} className="border-2 border-dashed border-dark/30 rounded-[2rem] p-8 flex items-center justify-center bg-dark/10 opacity-70 hover:opacity-100 transition-opacity">
                             <div className="text-center animate-pulse">
-                                <p className="font-mono text-xs uppercase tracking-wide text-dark/50">Em desenvolvimento</p>
+                                <p className="font-mono text-xs uppercase tracking-wide text-dark/80 font-semibold">Em desenvolvimento</p>
                             </div>
                         </div>
                     ))}

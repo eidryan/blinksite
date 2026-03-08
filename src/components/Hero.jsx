@@ -35,7 +35,7 @@ export default function Hero() {
         <section
             id="hero"
             data-theme="dark"
-            className="relative min-h-[100dvh] flex flex-col justify-center items-start px-6 lg:px-20 overflow-hidden"
+            className="relative min-h-[100dvh] flex flex-col justify-end items-start px-6 lg:px-20 pb-24 lg:pb-32 overflow-hidden bg-[#050505]"
         >
             <div className="absolute inset-0 z-0 pointer-events-auto">
                 <BayerShader
@@ -46,11 +46,11 @@ export default function Hero() {
             </div>
 
             {/* Star Watermark */}
-            <div data-speed="0.3" className="absolute -bottom-[20vw] -left-[10vw] z-0 opacity-[0.03] animate-[spin_180s_linear_infinite]">
-                <OrigamiStar className="w-[70vw] h-[70vw]" />
+            <div data-speed="0.3" className="absolute bottom-10 -right-10 lg:right-10 z-0 opacity-20 pointer-events-none">
+                <OrigamiStar className="w-32 h-32 lg:w-48 lg:h-48" />
             </div>
 
-            <div ref={containerRef} className="relative z-10 max-w-5xl mt-20">
+            <div ref={containerRef} className="relative z-10 max-w-5xl pointer-events-none mt-20">
                 <p className="font-mono text-orange uppercase text-xs lg:text-sm tracking-widest mb-8">
                     Rio de Janeiro, Brasil
                 </p>
@@ -93,7 +93,7 @@ export default function Hero() {
                     ref={ctaRef}
                     href="#sobre"
                     data-cursor="action"
-                    className="inline-flex items-center gap-2 brand-gradient text-dark font-body font-semibold px-8 py-4 rounded-full hover:scale-105 transition-transform opacity-0 relative overflow-hidden group"
+                    className="pointer-events-auto inline-flex items-center gap-2 brand-gradient text-dark font-body font-semibold px-8 py-4 rounded-full hover:scale-105 transition-transform opacity-0 relative overflow-hidden group"
                     onMouseMove={(e) => {
                         const rect = e.currentTarget.getBoundingClientRect();
                         const x = e.clientX - rect.left;

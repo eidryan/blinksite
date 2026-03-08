@@ -150,13 +150,6 @@ function App() {
 
   return (
     <>
-      {/* Noise Overlay Filter globally applied */}
-      <svg className="hidden">
-        <filter id="noiseFilter">
-          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch" />
-        </filter>
-      </svg>
-      <div className="noise-overlay" style={{ filter: 'url(#noiseFilter)' }}></div>
 
       {/* Initial Loader (removed from DOM after completion to avoid blocking interactions) */}
       {loading && (

@@ -1,13 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const fragmentShader = `
-// Fragment shader — faceted brand gradient
 varying vec3 vColor;
 varying float vFold;
 uniform vec2 uResolution;
+uniform vec2 uMouse;
+uniform vec4 uTextRects[6]; // [x, y, w, h] in pixels
+uniform int uNumRects;
+
+// Distance from point p to an axis-aligned bounding box
+float sdBox(vec2 p, vec2 b) {
+    vec2 d = abs(p) - b;
+    return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+}
 
 void main() {
   vec3 color = vColor + vFold * vec3(0.15, 0.08, 0.0);
@@ -19,7 +27,31 @@ void main() {
   vec3 dark = vec3(0.129);
   vec3 finalColor = mix(color, dark, vignette * 0.55);
 
-  gl_FragColor = vec4(finalColor, 0.50 + vFold * 0.14);
+  // Backlight effect
+  float lightIntensity = 0.0;
+  for(int i = 0; i < 6; i++) {
+      if(i >= uNumRects) break;
+      
+      // Convert rect to screen space coordinates
+      vec2 rectCenter = vec2(uTextRects[i].x + uTextRects[i].z * 0.5, (uResolution.y - uTextRects[i].y) - uTextRects[i].w * 0.5);
+      vec2 rectHalfSize = vec2(uTextRects[i].z * 0.5, uTextRects[i].w * 0.5);
+      
+      // Calculate distance to the box
+      float d = sdBox(gl_FragCoord.xy - rectCenter, rectHalfSize);
+      
+      // If we are near the text, add light based on mouse proximity
+      if(d < 40.0) {
+          float mouseDist = distance(gl_FragCoord.xy, vec2(uMouse.x * uResolution.x, uMouse.y * uResolution.y));
+          float spotlight = smoothstep(300.0, 0.0, mouseDist);
+          // Glow intensity
+          lightIntensity = max(lightIntensity, spotlight * smoothstep(40.0, 0.0, d));
+      }
+  }
+
+  // Add the backlight glowing orange
+  finalColor += vec3(1.0, 0.4, 0.0) * lightIntensity * 0.8;
+
+  gl_FragColor = vec4(finalColor, 0.50 + vFold * 0.14 + lightIntensity * 0.3);
 }
 `;
 
@@ -121,20 +153,23 @@ export default function HeroCanvas() {
         });
         container.appendChild(renderer.domElement);
 
-        const geometry = buildOrigamiGeometry(24, 16);
         const material = new THREE.ShaderMaterial({
             vertexShader,
             fragmentShader,
             uniforms: {
                 uTime: { value: 0 },
                 uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-                uResolution: { value: new THREE.Vector2(1, 1) },
-                uScrollProgress: { value: 0 }
+                uResolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
+                uScrollProgress: { value: 0 },
+                uTextRects: { value: Array(6).fill(new THREE.Vector4(0, 0, 0, 0)) },
+                uNumRects: { value: 0 }
             },
             transparent: true,
             depthWrite: false,
             side: THREE.DoubleSide
         });
+
+        const geometry = buildOrigamiGeometry(24, 16);
         const mesh = new THREE.Mesh(geometry, material);
         scene.add(mesh);
 
@@ -142,9 +177,39 @@ export default function HeroCanvas() {
             renderer.setSize(container.clientWidth, container.clientHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             material.uniforms.uResolution.value.set(renderer.domElement.width, renderer.domElement.height);
+            updateTextRects(); // Update rects on resize
         };
-        setSize();
+        
+        // Setup initial sizes properly
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        material.uniforms.uResolution.value.set(renderer.domElement.width, renderer.domElement.height);
+        
         window.addEventListener('resize', setSize);
+
+        // Track text rects for backlight
+        const updateTextRects = () => {
+            const words = document.querySelectorAll('#hero .word-inner');
+            const rects = [];
+            words.forEach(w => {
+                const r = w.getBoundingClientRect();
+                // Store x, y, width, height multiplied by pixel ratio
+                const pr = renderer.getPixelRatio();
+                rects.push(new THREE.Vector4(r.x * pr, r.y * pr, r.width * pr, r.height * pr));
+            });
+            
+            // Fill rest with zeros if < 6
+            const filledRects = [...rects];
+            while (filledRects.length < 6) {
+                filledRects.push(new THREE.Vector4(0, 0, 0, 0));
+            }
+            
+            material.uniforms.uTextRects.value = filledRects;
+            material.uniforms.uNumRects.value = Math.min(rects.length, 6);
+        };
+
+        // Initial setup and observer for text changes
+        setTimeout(updateTextRects, 500);
 
         const heroSection = document.getElementById('hero');
         renderer.domElement.style.transition = 'none';

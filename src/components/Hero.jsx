@@ -102,16 +102,28 @@ export default function Hero() {
                     ref={ctaRef}
                     href="#sobre"
                     data-cursor="action"
-                    className="inline-flex items-center gap-2 brand-gradient text-dark font-body font-semibold px-8 py-4 rounded-full hover:scale-105 transition-transform opacity-0 relative overflow-hidden group"
+                    className="inline-flex items-center gap-2 brand-gradient text-dark font-body font-semibold px-8 py-4 rounded-full opacity-0 relative overflow-hidden group"
+                    style={{ transition: 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}
                     onMouseMove={(e) => {
                         const rect = e.currentTarget.getBoundingClientRect();
                         const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        // Gradient tracking
                         const width = rect.width;
                         const angle = (x / width) * 135;
                         e.currentTarget.style.setProperty('--gradient-angle', `${angle}deg`);
+                        
+                        // Magnetic pull
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const pullX = (e.clientX - centerX) * 0.2; // 20% pull strength
+                        const pullY = (e.clientY - centerY) * 0.2;
+                        e.currentTarget.style.transform = `translate(${pullX}px, ${pullY}px) scale(1.05)`;
                     }}
                     onMouseLeave={(e) => {
                         e.currentTarget.style.setProperty('--gradient-angle', `135deg`);
+                        e.currentTarget.style.transform = `translate(0px, 0px) scale(1)`;
                     }}
                 >
                     Conheça a Blink <span className="text-xl inline-block group-hover:animate-bounce">↓</span>

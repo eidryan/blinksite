@@ -13,6 +13,8 @@
     --red: #F21A1A;
     --dark-red: #C81010;
     --mid-orange: #FF8A1C;
+    --bg-void: #212121;
+    --bg-paper: #FDFAF4;
     --scroll-velocity: 0;
   }
 
@@ -70,6 +72,16 @@
     @apply inline-block;
     clip-path: inset(0 0 100% 0);
     transform: translateY(30px);
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+    perspective: 1500px;
+  }
+
+  .fold-hinge {
+    transform-origin: top center;
+    backface-visibility: hidden;
   }
 }
 

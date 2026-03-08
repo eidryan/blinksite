@@ -125,6 +125,55 @@ function App() {
     });
 
     // --------------------------------------------------------
+    // Origami Hinge Folding Engine
+    // --------------------------------------------------------
+    const mainSections = gsap.utils.toArray('main > section');
+    // Only apply on non-touch devices for performance
+    if (window.innerWidth >= 1024) {
+      mainSections.forEach((section, index) => {
+        // Skip hero
+        if (index === 0) return;
+
+        gsap.set(section, { transformPerspective: 1500, transformOrigin: 'top center' });
+        
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top bottom', // Start when top of section hits bottom of viewport
+          end: 'top top',      // End when top of section hits top of viewport
+          scrub: true,
+          onUpdate: (self) => {
+              // It starts folded in (90deg) and unfolds to flat (0deg)
+              const rotation = (1 - self.progress) * 90;
+              // Fade in slightly as it unfolds
+              const opacity = 0.5 + (self.progress * 0.5);
+              
+              gsap.set(section, { 
+                  rotationX: rotation,
+                  opacity: opacity,
+                  willChange: self.progress > 0 && self.progress < 1 ? 'transform, opacity' : 'auto'
+              });
+          }
+        });
+
+        // Fold away as it scrolls out top
+        ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            onUpdate: (self) => {
+                // Folds backwards (-90deg)
+                const rotation = self.progress * -90;
+                gsap.set(section, {
+                    rotationX: rotation,
+                    willChange: self.progress > 0 && self.progress < 1 ? 'transform' : 'auto'
+                });
+            }
+        });
+      });
+    }
+
+    // --------------------------------------------------------
     // D. Origami Divider Unfold Animations
     // --------------------------------------------------------
     const dividers = gsap.utils.toArray('.brand-gradient-divider');
@@ -168,7 +217,7 @@ function App() {
           {/* Overriding gradient visually, just mixing dark background */}
           <div className="absolute inset-0 bg-dark/95"></div>
           <div ref={loaderStarRef} className="relative z-10 opacity-0 scale-50">
-            <OrigamiStar className="w-16 h-16" />
+            <OrigamiStar className="w-16 h-16 main-loader-star" />
           </div>
         </div>
       )}

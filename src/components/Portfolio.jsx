@@ -8,6 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Portfolio() {
     const sectionRef = useRef(null);
     const cardRef = useRef(null);
+    const dioramaRef = useRef(null);
+    const contentRef = useRef(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -29,25 +31,43 @@ export default function Portfolio() {
     const handleMouseMove = (e) => {
         if (!cardRef.current) return;
         const rect = cardRef.current.getBoundingClientRect();
-        const x = e.clientX - rect.left; // x position within the element.
-        const y = e.clientY - rect.top;  // y position within the element.
+        const x = e.clientX - rect.left; 
+        const y = e.clientY - rect.top;  
 
-        // Normalize coordinates from -1 to 1 based on center axis
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
         const percentX = (x - centerX) / centerX;
-        const percentY = -((y - centerY) / centerY); // inverted Y for correct 3D rotation logic
+        const percentY = -((y - centerY) / centerY); 
 
-        // Max rotation 3 deg
+        // The card tilts slightly backward and follows mouse
         gsap.to(cardRef.current, {
             duration: 0.5,
-            rotateX: percentY * 3,
-            rotateY: percentX * 3,
+            rotateX: 20 + percentY * 5, // base tilt back + mouse influence
+            rotateY: percentX * 5,
+            scale: 0.95,
             ease: 'power2.out',
-            transformPerspective: 800,
-            transformOrigin: 'center'
+            transformPerspective: 1000,
+            transformOrigin: 'bottom center'
         });
+
+        // The internal "diorama" pops up
+        if (dioramaRef.current && contentRef.current) {
+            gsap.to(contentRef.current, {
+                duration: 0.5,
+                opacity: 0.2,
+                translateZ: -50,
+                ease: 'power2.out'
+            });
+            gsap.to(dioramaRef.current, {
+                duration: 0.5,
+                translateZ: 100,
+                scale: 1,
+                opacity: 1,
+                rotateX: -20, // Counter-rotate to face user
+                ease: 'power2.out'
+            });
+        }
     };
 
     const handleMouseLeave = () => {
@@ -56,8 +76,26 @@ export default function Portfolio() {
             duration: 0.8,
             rotateX: 0,
             rotateY: 0,
+            scale: 1,
             ease: 'elastic.out(1, 0.3)'
         });
+        
+        if (dioramaRef.current && contentRef.current) {
+            gsap.to(contentRef.current, {
+                duration: 0.8,
+                opacity: 1,
+                translateZ: 0,
+                ease: 'elastic.out(1, 0.3)'
+            });
+            gsap.to(dioramaRef.current, {
+                duration: 0.8,
+                translateZ: 0,
+                scale: 0.8,
+                opacity: 0,
+                rotateX: 0,
+                ease: 'elastic.out(1, 0.3)'
+            });
+        }
     };
 
     return (
@@ -69,7 +107,7 @@ export default function Portfolio() {
         >
             <div className="brand-gradient-divider absolute top-0 left-0"></div>
 
-            <div className="max-w-7xl mx-auto flex flex-col items-center" style={{ perspective: '800px' }}>
+            <div className="max-w-7xl mx-auto flex flex-col items-center" style={{ perspective: '1200px' }}>
 
                 <div className="mb-20 text-center w-full">
                     <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange rounded-full px-3 py-1 mb-6 inline-block">
@@ -99,13 +137,25 @@ export default function Portfolio() {
                     ref={cardRef}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
-                    className="w-full lg:w-[70%] bg-[#212121] text-cream rounded-[2rem] p-10 lg:p-14 relative overflow-hidden group shadow-2xl hover:shadow-orange/10 transition-shadow duration-500 will-change-transform preserve-3d"
+                    className="w-full lg:w-[70%] bg-[#212121] text-cream rounded-[2rem] p-10 lg:p-14 relative group shadow-2xl hover:shadow-orange/20 transition-shadow duration-500 will-change-transform preserve-3d transform-style-3d"
+                    style={{ transformStyle: 'preserve-3d' }}
                 >
+                    {/* Pop-up Diorama Element (Hidden by default) */}
+                    <div 
+                        ref={dioramaRef}
+                        className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-0 scale-75 z-20"
+                        style={{ transformStyle: 'preserve-3d', transform: 'translateZ(0px)' }}
+                    >
+                        <div className="w-[80%] h-[60%] rounded-xl border border-orange/50 bg-gradient-to-br from-[#FFA52E]/30 to-[#F21A1A]/10 backdrop-blur-md shadow-[0_0_50px_rgba(255,106,0,0.3)] flex flex-col items-center justify-center">
+                             <h4 className="font-display font-bold text-4xl text-orange mb-2">Cadencio</h4>
+                             <p className="font-mono text-xs uppercase tracking-widest text-cream">Sistema Operacional</p>
+                        </div>
+                    </div>
+
                     {/* Background decoration */}
                     <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-[#FFA52E]/20 to-[#F21A1A]/0 rounded-bl-full opacity-50 blur-3xl transition-opacity group-hover:opacity-100"></div>
 
-                    <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
-
+                    <div ref={contentRef} className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10" style={{ transformStyle: 'preserve-3d' }}>
                         <div className="flex-1">
                             <div className="flex items-center gap-3 mb-8">
                                 <span className="flex h-3 w-3 relative">

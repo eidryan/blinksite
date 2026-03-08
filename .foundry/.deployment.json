@@ -1,0 +1,7 @@
+{
+  "hostedAgentDeployOptions": {
+    "dockerContextPath": "c:\\Users\\adria\\OneDrive\\Documents\\blinksite",
+    "dockerfilePath": "c:\\Users\\adria\\OneDrive\\Documents\\blinksite\\Dockerfile",
+    "agentName": "blinksite"
+  }
+}

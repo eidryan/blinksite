@@ -14,7 +14,6 @@ import OrigamiStar from './components/OrigamiStar';
 
 // Premium Features
 import BrandCursor from './components/BrandCursor';
-import HeroCanvas from './components/webgl/HeroCanvas';
 import ImageHoverEffect from './components/webgl/ImageHoverEffect';
 import ScrollVelocityReactor from './components/ScrollVelocityReactor';
 
@@ -174,7 +173,6 @@ function App() {
       )}
 
       <BrandCursor />
-      <HeroCanvas />
       <ImageHoverEffect />
       <ScrollVelocityReactor />
 

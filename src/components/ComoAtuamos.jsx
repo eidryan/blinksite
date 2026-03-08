@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { DitheringShader } from './ui/dithering-shader';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -117,11 +118,26 @@ export default function ComoAtuamos() {
             id="como-atuamos"
             ref={sectionRef}
             data-theme="dark"
-            className="relative py-32 bg-dark text-cream border-t border-white/5 overflow-hidden min-h-screen flex flex-col justify-center"
+            className="py-32 bg-dark text-cream relative overflow-hidden"
         >
-            <div className="brand-gradient-divider absolute top-0 left-0"></div>
+            {/* Subtle background shader repurposed from Hero */}
+            <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" style={{ mixBlendMode: 'screen' }}>
+                <DitheringShader
+                    width={typeof window !== 'undefined' ? window.innerWidth : 1920}
+                    height={typeof window !== 'undefined' ? window.innerHeight : 1080}
+                    shape="ripple"
+                    type="2x2"
+                    colorBack="#000000"
+                    colorFront="#ff6a00"
+                    pxSize={3}
+                    speed={0.8}
+                    style={{ width: '100%', height: '100%' }}
+                />
+            </div>
 
-            <div className="max-w-7xl mx-auto w-full px-6 lg:px-20 shrink-0 mb-16 lg:mb-20">
+            <div className="brand-gradient-divider absolute top-0 left-0 z-10"></div>
+
+            <div className="max-w-7xl mx-auto px-6 lg:px-20 relative z-10">
                 <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1 mb-8 inline-block">
                     02 — Como Atuamos
                 </span>

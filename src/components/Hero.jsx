@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import OrigamiStar from './OrigamiStar';
-import { DitheringShader } from './ui/dithering-shader';
+import { BayerShader } from './ui/bayer-shader';
 
 export default function Hero() {
     const containerRef = useRef(null);
@@ -37,22 +37,13 @@ export default function Hero() {
             data-theme="dark"
             className="relative min-h-[100dvh] flex flex-col justify-center items-start px-6 lg:px-20 overflow-hidden"
         >
-            <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">        
-                <DitheringShader
-                    width={1920}
-                    height={1080}
-                    shape="ripple"
-                    type="2x2"
-                    colorBack="#330000"
-                    colorFront="#ffff00"
-                    pxSize={2}
-                    speed={1.2}
-                    style={{ width: '100%', height: '100%' }}
+            <div className="absolute inset-0 z-0 pointer-events-auto">
+                <BayerShader
+                    shape="circle"
+                    pixelSize={4}
+                    color="#ff6a00"
                 />
             </div>
-
-            {/* Canvas Mount Point for Prompts 2 */}
-            <div data-canvas="hero" className="absolute inset-0 z-[1]"></div>
 
             {/* Star Watermark */}
             <div data-speed="0.3" className="absolute -bottom-[20vw] -left-[10vw] z-0 opacity-[0.03] animate-[spin_180s_linear_infinite]">

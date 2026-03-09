@@ -11,6 +11,7 @@ import Portfolio from './components/Portfolio';
 import Fundadores from './components/Fundadores';
 import Footer from './components/Footer';
 import brandLogoComplete from './assets/brand/LogoBlink_Completa (1).png';
+import ScrollRevealSection from './components/ScrollRevealSection';
 
 // Premium Features
 import BrandCursor from './components/BrandCursor';
@@ -173,13 +174,16 @@ function App() {
       <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
         <Navbar />
         <main>
-          <Hero />
-          <Sobre />
+          {/* ScrollRevealSection ONLY contains the Hero and the first section to transition seamlessly.
+              Wait! If it only wraps Sobre, then ComoAtuamos flows naturally below the pin-spacer! */}
+          <ScrollRevealSection hero={<Hero />}>
+            <Sobre />
+          </ScrollRevealSection>
           <ComoAtuamos />
           <Portfolio />
           <Fundadores />
+          <Footer />
         </main>
-        <Footer />
       </div>
     </>
   );

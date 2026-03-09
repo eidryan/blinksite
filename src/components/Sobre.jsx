@@ -12,19 +12,13 @@ export default function Sobre() {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: sectionRef.current,
-                    start: "top 75%",
-                    toggleActions: "play none none reverse",
-                }
-            });
+            const tl = gsap.timeline();
 
-            // Columns slide in
+            // 1. Columns slide in immediately, no scrollTrigger needed for the pinned reveal
             tl.from(leftColRef.current, { x: -50, opacity: 0, duration: 1, ease: 'power3.out' })
                 .from(rightColRef.current, { x: 50, opacity: 0, duration: 1, ease: 'power3.out' }, "-=0.8");
 
-            // Word-level clip-path for title
+            // 2. Word-level clip-path for title
             const words = titleRef.current.querySelectorAll('.word');
             tl.fromTo(words,
                 { clipPath: 'inset(0% 0% 100% 0%)', y: 30 },
@@ -41,7 +35,7 @@ export default function Sobre() {
             id="sobre"
             ref={sectionRef}
             data-theme="light"
-            className="py-32 px-6 lg:px-20 bg-cream text-dark"
+            className="w-full min-h-[100vh] flex items-center py-20 px-6 lg:px-20 bg-cream text-dark"
         >
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
 
@@ -85,6 +79,6 @@ export default function Sobre() {
                 </div>
 
             </div>
-        </section>
+        </section >
     );
 }

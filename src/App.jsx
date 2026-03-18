@@ -10,7 +10,7 @@ import ComoAtuamos from './components/ComoAtuamos';
 import Portfolio from './components/Portfolio';
 import Fundadores from './components/Fundadores';
 import Footer from './components/Footer';
-import brandLogoComplete from './assets/brand/LogoBlink_Completa (1).png';
+import brandLogoCompleteWhite from './assets/brand/LogoBlink_Completa_Branca.png';
 import ScrollRevealSection from './components/ScrollRevealSection';
 
 // Premium Features
@@ -161,7 +161,7 @@ function App() {
           {/* Overriding gradient visually, just mixing dark background */}
           <div className="absolute inset-0 bg-dark/95"></div>
           <div ref={loaderStarRef} className="relative z-10 opacity-0 scale-50 w-48 md:w-64">
-            <img src={brandLogoComplete} alt="Blink Logo" className="w-full h-auto object-contain" />
+            <img src={brandLogoCompleteWhite} alt="Blink Logo" className="w-full h-auto object-contain" />
           </div>
         </div>
       )}

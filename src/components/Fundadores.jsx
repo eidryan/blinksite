@@ -1,18 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import luanPhoto from '../assets/founders/luan.jpg';
+import adrianPhoto from '../assets/founders/adrian.jpg';
 
 const founders = [
     {
         name: "Luan Carvalho",
         role: "CO-FUNDADOR, DESENVOLVIMENTO",
         desc: "Arquitetura de sistemas, full-stack e automação. Constrói as ferramentas que a operação pede.",
-        photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=600&auto=format&fit=crop"
+        photo: luanPhoto,
+        photoPosition: 'center 25%'
     },
     {
         name: "Adrian Villela",
         role: "CO-FUNDADOR, OPERAÇÕES & ESTRATÉGIA",
         desc: "Engenharia de produção, mapeamento de processos e estratégia de produto. Encontra a dor antes de construir.",
-        photo: "https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=600&auto=format&fit=crop"
+        photo: adrianPhoto,
+        photoPosition: 'center 18%'
     }
 ];
 
@@ -74,14 +78,14 @@ export default function Fundadores() {
             <div className="max-w-7xl mx-auto">
 
                 <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1 inline-block mb-12">
-                    04 — Fundadores
+                    04. Fundadores
                 </span>
 
                 <h2 className="font-display font-semibold text-4xl lg:text-5xl mb-20" style={{ textWrap: 'balance' }}>
                     Quem está por trás.
                 </h2>
 
-                {/* Founder cards — side-by-side layout */}
+                {/* Founder cards - side-by-side layout */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
                     {founders.map((founder, i) => (
                         <div
@@ -92,25 +96,26 @@ export default function Fundadores() {
                             className="group will-change-transform flex flex-row gap-6 items-start"
                             style={{ transformStyle: 'preserve-3d' }}
                         >
-                            {/* Photo — compact */}
+                            {/* Photo - compact */}
                             <div className="relative rounded-xl overflow-hidden border border-white/10 group-hover:border-orange/20 transition-colors duration-500 bg-[#1A1A1A] shrink-0 w-[140px] lg:w-[180px]">
                                 <div className="h-[2px] w-full brand-gradient opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                                 <div
                                     className="image-canvas-wrapper relative w-full"
                                     data-canvas="image"
-                                    style={{ aspectRatio: '1/1' }}
+                                    style={{ aspectRatio: '4 / 5' }}
                                 >
                                     <img
                                         src={founder.photo}
                                         alt={founder.name}
-                                        crossOrigin="anonymous"
                                         data-cursor="image"
                                         className="absolute inset-0 w-full h-full object-cover"
+                                        style={{ objectPosition: founder.photoPosition }}
+                                        loading="lazy"
                                     />
                                 </div>
                             </div>
 
-                            {/* Bio — more space */}
+                            {/* Bio - more space */}
                             <div className="flex-1 pt-2">
                                 <h3 className="font-display font-bold text-2xl lg:text-3xl mb-1">
                                     {founder.name}
@@ -132,7 +137,7 @@ export default function Fundadores() {
                         &quot;Pode haver tanto valor em um piscar de olhos quanto em meses de análise racional.&quot;
                     </p>
                     <p className="font-mono text-xs uppercase tracking-widest text-[#FF8A1C]">
-                        — Malcolm Gladwell, Blink
+                        Malcolm Gladwell, Blink
                     </p>
                 </div>
 
@@ -140,3 +145,4 @@ export default function Fundadores() {
         </section>
     );
 }
+

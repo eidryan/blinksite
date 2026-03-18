@@ -1,6 +1,10 @@
 import React from 'react';
 
 export default function Footer() {
+    const whatsappNumber = '+55 21 99023-0538';
+    const whatsappHref = 'https://wa.me/5521990230538';
+    const linkedInHref = 'https://www.linkedin.com/company/blinkbr';
+
     return (
         <footer
             id="contato"
@@ -15,7 +19,7 @@ export default function Footer() {
                 <div>
                     <div className="flex justify-between items-start mb-16">
                         <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1">
-                            05 — Contato
+                            05. Contato
                         </span>
                         {/* Origami Arrow Easter Egg */}
                         <div className="w-6 h-6 opacity-60 animate-[breathe_6s_infinite] origin-center -rotate-45" style={{ perspective: '300px' }}>
@@ -30,7 +34,7 @@ export default function Footer() {
                         Vamos conversar.
                     </h2>
                     <p className="font-body text-xl lg:text-2xl text-cream/70 max-w-2xl">
-                        Uma conversa sem compromisso. Se fizer sentido, a gente constrói junto.
+                        Fale com a Blink pelo WhatsApp. Se fizer sentido, a gente avança juntos.
                     </p>
                 </div>
 
@@ -38,20 +42,50 @@ export default function Footer() {
                     {/* Main CTAs */}
                     <div className="lg:col-span-2">
                         <a
-                            href="mailto:contato@blinkgroup.com.br"
+                            href={whatsappHref}
+                            target="_blank"
+                            rel="noreferrer"
                             data-cursor="action"
                             className="inline-block brand-gradient text-dark font-body font-bold text-xl lg:text-2xl px-8 py-4 rounded-full hover:scale-105 transition-transform mb-4 mr-4"
                         >
-                            Fale Conosco
+                            Chamar no WhatsApp
                         </a>
+                        <div className="font-body text-lg text-cream/75">
+                            <p className="font-mono text-xs tracking-widest text-orange uppercase mb-2">Número principal</p>
+                            <a
+                                href={whatsappHref}
+                                target="_blank"
+                                rel="noreferrer"
+                                data-cursor="link"
+                                className="text-2xl lg:text-3xl text-cream hover:text-orange transition-colors"
+                            >
+                                {whatsappNumber}
+                            </a>
+                        </div>
                     </div>
 
                     {/* Contact Links */}
                     <div className="flex flex-col gap-4 font-body text-lg">
                         <p className="font-mono text-xs tracking-widest text-orange uppercase mb-2">Conecte-se</p>
-                        <a href="#" data-cursor="link" className="hover:text-orange transition-colors">WhatsApp</a>
+                        <a
+                            href={whatsappHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            data-cursor="link"
+                            className="hover:text-orange transition-colors"
+                        >
+                            WhatsApp
+                        </a>
                         <a href="mailto:contato@blinkgroup.com.br" data-cursor="link" className="hover:text-orange transition-colors">contato@blinkgroup.com.br</a>
-                        <a href="#" data-cursor="link" className="hover:text-orange transition-colors">LinkedIn</a>
+                        <a
+                            href={linkedInHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            data-cursor="link"
+                            className="hover:text-orange transition-colors"
+                        >
+                            LinkedIn
+                        </a>
                     </div>
                 </div>
 
@@ -64,3 +98,4 @@ export default function Footer() {
         </footer>
     );
 }
+

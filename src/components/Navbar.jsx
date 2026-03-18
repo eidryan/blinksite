@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import logoBranca from '../assets/brand/LogoBlink_Branca.png';
-import logoPreta from '../assets/brand/LogoBlink_Preta.png';
+import logoBrancaCompleta from '../assets/brand/LogoBlink_Completa_Branca.png';
+import logoPretaCompleta from '../assets/brand/LogoBlink_Completa_Preta.png';
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -54,9 +54,9 @@ export default function Navbar() {
             >
                 <div className="flex items-center gap-3">
                     <img
-                        src={isScrolled ? logoPreta : logoBranca}
-                        alt="Blink Logo"
-                        className="h-6 w-auto transition-opacity"
+                        src={isScrolled ? logoPretaCompleta : logoBrancaCompleta}
+                        alt="Blink"
+                        className="h-7 lg:h-8 w-auto transition-all duration-300"
                     />
                 </div>
 

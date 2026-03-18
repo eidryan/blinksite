@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import logoBrancaCompleta from '../assets/brand/LogoBlink_Completa_Branca.png';
 import logoPretaCompleta from '../assets/brand/LogoBlink_Completa_Preta.png';
+
 export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const whatsappHref = 'https://wa.me/5521990230538';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -56,7 +58,7 @@ export default function Navbar() {
                     <img
                         src={isScrolled ? logoPretaCompleta : logoBrancaCompleta}
                         alt="Blink"
-                        className="h-7 lg:h-8 w-auto transition-all duration-300"
+                        className={`w-auto transition-all duration-300 ${isScrolled ? 'h-8 lg:h-9' : 'h-10 lg:h-12'}`}
                     />
                 </div>
 
@@ -84,7 +86,9 @@ export default function Navbar() {
                 {/* Desktop CTA */}
                 <div className="hidden lg:block">
                     <a
-                        href="#contato"
+                        href={whatsappHref}
+                        target="_blank"
+                        rel="noreferrer"
                         data-cursor="action"
                         className="brand-gradient text-dark font-body font-semibold text-sm px-6 py-2.5 rounded-full hover:scale-105 transition-transform inline-block relative overflow-hidden group"
                         onMouseMove={(e) => {
@@ -131,7 +135,9 @@ export default function Navbar() {
                             );
                         })}
                         <a
-                            href="#contato"
+                            href={whatsappHref}
+                            target="_blank"
+                            rel="noreferrer"
                             onClick={() => setMobileMenuOpen(false)}
                             className="mt-8 brand-gradient text-dark font-body font-semibold text-lg px-8 py-4 rounded-full"
                         >

@@ -43,7 +43,7 @@ export default function Sobre() {
                 <div ref={leftColRef} className="lg:col-span-5 flex flex-col justify-start">
                     <div className="flex items-center gap-4 mb-12">
                         <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange rounded-full px-3 py-1">
-                            01 — Sobre
+                            01. Sobre
                         </span>
                         {/* Origami Accent */}
                         <div className="w-8 h-8 opacity-80 animate-[breathe_6s_infinite] origin-center" style={{ perspective: '400px' }}>
@@ -68,10 +68,10 @@ export default function Sobre() {
                 {/* Right Column (60%) */}
                 <div ref={rightColRef} className="lg:col-span-7 flex flex-col justify-center gap-8 font-body text-lg lg:text-xl text-dark/80 leading-relaxed">
                     <p>
-                        Pequenas empresas no Brasil resolvem problemas complexos com ferramentas genéricas — ou sem ferramenta nenhuma. A Blink existe porque acreditamos que cada nicho de mercado merece algo construído para ele.
+                        Pequenas empresas no Brasil resolvem problemas complexos com ferramentas genéricas, ou sem ferramenta nenhuma. A Blink existe porque acreditamos que cada nicho de mercado merece algo construído para ele.
                     </p>
                     <p>
-                        Entramos na operação, entendemos como o negócio funciona de verdade, e criamos a ferramenta que deveria ter existido desde o início. Depois, escalamos para todo o mercado.
+                        Entramos na operação, entendemos como o negócio funciona de verdade e criamos a ferramenta que deveria ter existido desde o início. Depois, escalamos para todo o mercado.
                     </p>
                     <p className="font-semibold text-dark">
                         Cada produto é uma marca independente. A Blink é a estrutura por trás.

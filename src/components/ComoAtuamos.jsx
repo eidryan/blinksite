@@ -8,15 +8,15 @@ gsap.registerPlugin(ScrollTrigger);
 const cards = [
     {
         prefix: "Primeiro, a operação.",
-        text: "— Não construímos ferramentas a partir de suposições. Entramos no negócio, mapeamos cada processo, e encontramos a dor que realmente importa. A ferramenta nasce dessa verdade — não de um briefing."
+        text: "Não construímos ferramentas a partir de suposições. Entramos no negócio, mapeamos cada processo e encontramos a dor que realmente importa. A ferramenta nasce dessa verdade, não de um briefing."
     },
     {
         prefix: "Depois, lado a lado.",
-        text: "— O cliente não recebe um produto pronto. Ele participa da construção, semana a semana, até que a ferramenta funcione na realidade dele. Não prometemos — entregamos."
+        text: "O cliente não recebe um produto pronto. Ele participa da construção, semana a semana, até que a ferramenta funcione na realidade dele. Não prometemos. Entregamos."
     },
     {
         prefix: "Aí, o nicho inteiro.",
-        text: "— O produto se torna independente — marca própria, operação própria — e atende centenas de negócios do mesmo mercado. A consultoria fica sob medida. O software é",
+        text: "O produto se torna independente, com marca própria e operação própria, e atende centenas de negócios do mesmo mercado. A consultoria fica sob medida. O software é",
         highlight: "padrão."
     }
 ];
@@ -145,7 +145,7 @@ export default function ComoAtuamos() {
 
             <div className="max-w-7xl mx-auto px-6 lg:px-20 relative z-10">
                 <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1 mb-8 inline-block">
-                    02 — Como Atuamos
+                    02. Como Atuamos
                 </span>
                 <h2 className="font-display font-semibold text-4xl lg:text-5xl max-w-2xl leading-tight">
                     Construímos junto. Escalamos depois.

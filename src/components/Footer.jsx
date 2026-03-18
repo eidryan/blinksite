@@ -1,7 +1,6 @@
 import React from 'react';
 
 export default function Footer() {
-    const whatsappNumber = '+55 21 99023-0538';
     const whatsappHref = 'https://wa.me/5521990230538';
     const linkedInHref = 'https://www.linkedin.com/company/blinkbr';
 
@@ -48,20 +47,8 @@ export default function Footer() {
                             data-cursor="action"
                             className="inline-block brand-gradient text-dark font-body font-bold text-xl lg:text-2xl px-8 py-4 rounded-full hover:scale-105 transition-transform mb-4 mr-4"
                         >
-                            Chamar no WhatsApp
+                            Fale Conosco
                         </a>
-                        <div className="font-body text-lg text-cream/75">
-                            <p className="font-mono text-xs tracking-widest text-orange uppercase mb-2">Número principal</p>
-                            <a
-                                href={whatsappHref}
-                                target="_blank"
-                                rel="noreferrer"
-                                data-cursor="link"
-                                className="text-2xl lg:text-3xl text-cream hover:text-orange transition-colors"
-                            >
-                                {whatsappNumber}
-                            </a>
-                        </div>
                     </div>
 
                     {/* Contact Links */}

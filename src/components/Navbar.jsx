@@ -58,7 +58,7 @@ export default function Navbar() {
                     <img
                         src={isScrolled ? logoPretaCompleta : logoBrancaCompleta}
                         alt="Blink"
-                        className={`w-auto transition-all duration-300 ${isScrolled ? 'h-10 lg:h-12' : 'h-12 lg:h-14'}`}
+                        className={`w-auto transition-all duration-300 ${isScrolled ? 'h-12 lg:h-14' : 'h-14 lg:h-16'}`}
                     />
                 </div>
 

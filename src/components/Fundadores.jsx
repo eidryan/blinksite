@@ -1,18 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import gustavoImg from '../assets/gustavo_foto.jpg';
 
 const founders = [
     {
         name: "Luan Carvalho",
         role: "CO-FUNDADOR, DESENVOLVIMENTO",
-        desc: "Full-stack, arquitetura, automação.",
+        desc: "Traduz problemas reais em sistemas que duram. Lidera a arquitetura e o desenvolvimento de cada produto da Blink, do backend ao deploy.",
         img: "https://images.unsplash.com/photo-1549692520-acc6669e2f0c?q=80&w=600&auto=format&fit=crop"
     },
     {
         name: "Adrian Villela",
         role: "CO-FUNDADOR, OPERAÇÕES & ESTRATÉGIA",
-        desc: "Eng. produção, processos, estratégia.",
+        desc: "Entra na operação, entende o que falta e define o caminho. Engenharia de produção aplicada a negócios que precisam de ferramenta própria.",
         img: "https://images.unsplash.com/photo-1537511446984-935f663eb1f4?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+        name: "Gustavo Ferreira",
+        role: "SÓCIO, DISTRIBUIÇÃO & MARKETING",
+        desc: "Leva o produto até quem precisa. Reels, posts e estratégia de conteúdo para transformar o que a Blink constrói em audiência real.",
+        img: gustavoImg
     }
 ];
 
@@ -114,7 +121,8 @@ export default function Fundadores() {
                     >
                         {founders.map((founder, i) => {
                             const isActive = i === activeIndex;
-                            const rotation = i === 0 ? -4 : 6;
+                            const rotations = [-4, 6, -6];
+                            const rotation = rotations[i] ?? 5;
                             return (
                                 <div
                                     key={i}
@@ -142,7 +150,7 @@ export default function Fundadores() {
                     </div>
 
                     {/* Bios */}
-                    <div className="relative h-48" ref={biosRef}>
+                    <div className="relative h-56" ref={biosRef}>
                         {founders.map((founder, i) => (
                             <div
                                 key={i}

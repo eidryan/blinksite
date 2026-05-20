@@ -73,7 +73,7 @@ export default function Portfolio() {
 
                 <div className="mb-20 text-center w-full">
                     <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange rounded-full px-3 py-1 mb-6 inline-block">
-                        03 — Portfólio
+                        03. Portfólio
                     </span>
                     <h2 className="font-display font-semibold text-4xl lg:text-5xl mx-auto max-w-2xl leading-tight text-dark">
                         Cada nicho, uma ferramenta.
@@ -160,3 +160,4 @@ export default function Portfolio() {
         </section>
     );
 }
+

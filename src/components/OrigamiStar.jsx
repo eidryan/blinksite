@@ -15,7 +15,7 @@ export default function OrigamiStar({ className = "w-10 h-10", style, isLoaded =
         // Prevent double-running if this is just a decorative instance that isn't the main loader
         if (!containerRef.current || !containerRef.current.classList.contains('main-loader-star')) return;
 
-        // A. Page Load — Star unfold (CSS 3D illusion)
+        // A. Page Load - Star unfold (CSS 3D illusion)
         // The star starts as a flat horizontal line, then folds open
         const faces = [face1.current, face2.current, face3.current, face4.current, face5.current];
 
@@ -130,3 +130,4 @@ export default function OrigamiStar({ className = "w-10 h-10", style, isLoaded =
         </div>
     );
 }
+

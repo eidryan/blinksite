@@ -1,33 +1,48 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 import { BayerShader } from './ui/bayer-shader';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
     const containerRef = useRef(null);
-    const headlineRef = useRef(null);
+    const titleRef = useRef(null);
     const subtitleRef = useRef(null);
     const ctaRef = useRef(null);
+    const triggerRef = useRef(null);
 
     useEffect(() => {
         const start = () => {
-            // Basic GSAP timeline for text reveals
             const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-            const words = headlineRef.current.querySelectorAll('.word-inner');
-
-            tl.to(words, {
-                y: 0,
-                clipPath: 'inset(0% 0% 0% 0%)',
-                rotationX: 0,
-                duration: 1.2,
-                stagger: 0.08
-            })
-                .fromTo(subtitleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1 }, "-=0.8")
+            tl.fromTo(titleRef.current, { opacity: 0, y: 28, filter: 'blur(12px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8 }, 0.2)
+                .fromTo(subtitleRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8 }, 0.6)
                 .fromTo(ctaRef.current, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 }, "-=0.6");
         };
 
         window.addEventListener('loaderComplete', start, { once: true });
         return () => window.removeEventListener('loaderComplete', start);
+    }, []);
+
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            ScrollTrigger.create({
+                trigger: triggerRef.current,
+                start: "top top",
+                end: "+=300",
+                onUpdate: (self) => {
+                    const progress = self.progress;
+                    gsap.set(titleRef.current, {
+                        y: progress * -36,
+                        opacity: 1 - progress * 0.55,
+                        filter: `blur(${progress * 10}px)`
+                    });
+                }
+            });
+        }, containerRef);
+
+        return () => ctx.revert();
     }, []);
 
     return (
@@ -45,37 +60,19 @@ export default function Hero() {
             </div>
 
 
-            <div ref={containerRef} className="relative z-10 max-w-5xl pointer-events-none mt-20">
+            <div ref={containerRef} className="relative z-10 w-full max-w-5xl pointer-events-none mt-20">
                 <p className="font-mono text-orange uppercase text-xs lg:text-sm tracking-widest mb-8">
                     Rio de Janeiro, Brasil
                 </p>
 
-                <h1
-                    ref={headlineRef}
-                    className="font-display font-extrabold text-cream text-[2.5rem] lg:text-[7rem] leading-[1.1] mb-8"
-                    style={{ perspective: '1000px', letterSpacing: 'clamp(-0.03em, -0.04em, -0.05em)', textWrap: 'balance' }}
-                >
-                    {/* Split text for GSAP word-by-word reveal */}
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>Decida</span>
-                    </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>em</span>
-                    </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>um</span>
-                    </span>
-                    <br className="hidden lg:block" />
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>piscar</span>
-                    </span>
-                    <span className="clip-text-wrap mr-4">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>de</span>
-                    </span>
-                    <span className="clip-text-wrap text-orange">
-                        <span className="word-inner clip-text-inner inline-block" style={{ transform: 'rotateX(6deg) translateY(30px)' }}>olhos.</span>
-                    </span>
-                </h1>
+                <div ref={triggerRef} className="relative w-full mb-8 lg:mb-12 pointer-events-none">
+                    <h1
+                        ref={titleRef}
+                        className="font-display text-cream text-[clamp(2.6rem,8vw,6.25rem)] font-extrabold leading-[0.92] tracking-[-0.05em] max-w-[12ch] opacity-0"
+                    >
+                        Decida em um piscar de <span className="text-orange">olhos</span>.
+                    </h1>
+                </div>
 
                 <p
                     ref={subtitleRef}

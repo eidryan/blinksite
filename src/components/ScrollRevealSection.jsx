@@ -9,6 +9,7 @@ export default function ScrollRevealSection({ hero, children }) {
     const containerRef = useRef(null);
     const shaderRef = useRef(null);
     const contentRef = useRef(null);
+    const hasFiredRef = useRef(false);
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
@@ -19,7 +20,7 @@ export default function ScrollRevealSection({ hero, children }) {
                     end: "+=150%", // 150vh scroll duration for the tunnel
                     pin: true,
                     scrub: 0.5,
-                    anticipatePin: 1,
+                    anticipatePin: 1
                 }
             });
 
@@ -31,6 +32,16 @@ export default function ScrollRevealSection({ hero, children }) {
                 ease: "none",
                 onUpdate: function () {
                     const p = this.targets()[0].p;
+
+                    // Fire the text animation earlier, when the inner circle is in the middle of opening
+                    if (p > 0.45 && !hasFiredRef.current) {
+                        window.dispatchEvent(new CustomEvent('ditherRevealComplete'));
+                        hasFiredRef.current = true;
+                    } else if (p <= 0.45 && hasFiredRef.current) {
+                        window.dispatchEvent(new CustomEvent('ditherRevealReset'));
+                        hasFiredRef.current = false;
+                    }
+
                     if (shaderRef.current) {
                         shaderRef.current.progress = p;
                     }
@@ -51,7 +62,7 @@ export default function ScrollRevealSection({ hero, children }) {
             // and pulling lower sections like "Como Atuamos" into the viewport unexpectedly.
             if (contentRef.current && contentRef.current.firstElementChild) {
                 tl.fromTo(contentRef.current.firstElementChild,
-                    { scale: 0.75, transformOrigin: "50% 50vh" },
+                    { scale: 0.60, transformOrigin: "50% 50vh" },
                     { scale: 1.0, transformOrigin: "50% 50vh", ease: "none" },
                     0);
             }

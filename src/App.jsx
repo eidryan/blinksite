@@ -24,6 +24,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const loaderStarRef = useRef(null);
   const loaderBgRef = useRef(null);
+  const loadingDoneRef = useRef(false);
 
   useEffect(() => {
     // --------------------------------------------------------
@@ -55,6 +56,8 @@ function App() {
     // Loading Sequence Animation
     // --------------------------------------------------------
     const finishLoading = () => {
+      if (loadingDoneRef.current) return;
+      loadingDoneRef.current = true;
       setLoading(false);
       ScrollTrigger.refresh();
       requestAnimationFrame(() => {
@@ -66,6 +69,8 @@ function App() {
 
     // Safety fallback: always reveal content after 2.5s even if GSAP fails
     const fallbackTimer = setTimeout(finishLoading, 2500);
+    const onWindowLoad = () => finishLoading();
+    window.addEventListener('load', onWindowLoad);
 
     if (loaderStarRef.current && loaderBgRef.current) {
       const tl = gsap.timeline({
@@ -146,6 +151,7 @@ function App() {
       lenis.destroy();
       ScrollTrigger.getAll().forEach(t => t.kill());
       gsap.ticker.remove(lenis.raf);
+      window.removeEventListener('load', onWindowLoad);
     };
   }, []);
 
@@ -171,7 +177,7 @@ function App() {
       <ScrollVelocityReactor />
 
       {/* Content wrapper */}
-      <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-300"}>
+      <div className={loading ? "opacity-100" : "opacity-100 transition-opacity duration-300"}>
         <Navbar />
         <main>
           {/* ScrollRevealSection ONLY contains the Hero and the first section to transition seamlessly.

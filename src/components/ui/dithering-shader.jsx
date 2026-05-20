@@ -273,8 +273,8 @@ function createProgram(gl, vertexSource, fragmentSource) {
 }
 
 export function DitheringShader({
-  width = 800,
-  height = 800,
+  width = "100%",
+  height = "100%",
   colorBack = "#000000",
   colorFront = "#ffffff",
   shape = "simplex",
@@ -285,11 +285,13 @@ export function DitheringShader({
   style = {},
 }) {
   const canvasRef = useRef(null);
+  const containerRef = useRef(null);
   const animationRef = useRef();
   const programRef = useRef(null);
   const glRef = useRef(null);
   const uniformLocationsRef = useRef({});
   const startTimeRef = useRef(Date.now());
+  const sizeRef = useRef({ width: 1, height: 1 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -323,9 +325,27 @@ export function DitheringShader({
     gl.enableVertexAttribArray(positionAttributeLocation);
     gl.vertexAttribPointer(positionAttributeLocation, 2, gl.FLOAT, false, 0, 0);
 
-    canvas.width = width;
-    canvas.height = height;
-    gl.viewport(0, 0, width, height);
+    const resize = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const dpr = window.devicePixelRatio || 1;
+      const numericWidth = typeof width === "number" ? width : null;
+      const numericHeight = typeof height === "number" ? height : null;
+
+      const nextWidth = Math.max(1, numericWidth ?? container.clientWidth);
+      const nextHeight = Math.max(1, numericHeight ?? container.clientHeight);
+
+      sizeRef.current = { width: nextWidth, height: nextHeight };
+
+      canvas.width = Math.floor(nextWidth * dpr);
+      canvas.height = Math.floor(nextHeight * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+
+    const resizeObserver = new ResizeObserver(() => resize());
+    if (containerRef.current) resizeObserver.observe(containerRef.current);
+    resize();
 
     const render = () => {
       const currentTime = (Date.now() - startTimeRef.current) * 0.001 * speed;
@@ -338,7 +358,7 @@ export function DitheringShader({
 
       const locations = uniformLocationsRef.current;
       if (locations.u_time) context.uniform1f(locations.u_time, currentTime);
-      if (locations.u_resolution) context.uniform2f(locations.u_resolution, width, height);
+      if (locations.u_resolution) context.uniform2f(locations.u_resolution, canvas.width, canvas.height);
       if (locations.u_colorBack) context.uniform4fv(locations.u_colorBack, hexToRgba(colorBack));
       if (locations.u_colorFront) context.uniform4fv(locations.u_colorFront, hexToRgba(colorFront));
       if (locations.u_shape) context.uniform1f(locations.u_shape, DitheringShapes[shape]);
@@ -352,6 +372,7 @@ export function DitheringShader({
     if (speed !== 0) animationRef.current = requestAnimationFrame(render);
 
     return () => {
+      resizeObserver.disconnect();
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
       if (glRef.current && programRef.current) glRef.current.deleteProgram(programRef.current);
     };
@@ -359,6 +380,7 @@ export function DitheringShader({
 
   return (
     <div
+      ref={containerRef}
       className={className}
       style={{
         position: "relative",

@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function Footer() {
-    const whatsappHref = 'https://wa.me/5521990230538';
+    const whatsappHref = 'https://wa.me/5521990230538?text=Oi%2C%20tenho%20interesse%20na%20Blink.';
     const linkedInHref = 'https://www.linkedin.com/company/blinkbr';
 
     return (

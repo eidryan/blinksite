@@ -10,7 +10,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.error) {
       return (
         <div style={{ color:'#FF6A00', background:'#111', padding:'24px', fontFamily:'monospace', position:'fixed', inset:0, zIndex:99999, overflow:'auto', whiteSpace:'pre-wrap' }}>
-          <b>🔴 Render Error — paste this in chat:</b>{'\n\n'}
+          <b>🔴 Render Error. Paste this in chat:</b>{'\n\n'}
           {this.state.error.toString()}{'\n\n'}
           {this.state.error.stack}
         </div>
@@ -27,3 +27,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </ErrorBoundary>
   </React.StrictMode>
 )
+

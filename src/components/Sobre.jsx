@@ -11,10 +11,14 @@ export default function Sobre() {
     const titleRef = useRef(null);
 
     useEffect(() => {
-        const ctx = gsap.context(() => {
-            const tl = gsap.timeline();
+        let tl;
+        const handleReveal = () => { if (tl) tl.play(); };
+        const handleReset = () => { if (tl) tl.reverse(); };
 
-            // 1. Columns slide in immediately, no scrollTrigger needed for the pinned reveal
+        const ctx = gsap.context(() => {
+            tl = gsap.timeline({ paused: true });
+
+            // 1. Columns slide in
             tl.from(leftColRef.current, { x: -50, opacity: 0, duration: 1, ease: 'power3.out' })
                 .from(rightColRef.current, { x: 50, opacity: 0, duration: 1, ease: 'power3.out' }, "-=0.8");
 
@@ -25,9 +29,18 @@ export default function Sobre() {
                 { clipPath: 'inset(0% 0% 0% 0%)', y: 0, duration: 0.8, stagger: 0.05, ease: 'power4.out' },
                 "-=0.6"
             );
+
+            // If the user loads the page already scrolled past the Hero, GSAP's scroll handler
+            // will immediately fire onLeave from ScrollRevealSection, catching this listener.
+            window.addEventListener('ditherRevealComplete', handleReveal);
+            window.addEventListener('ditherRevealReset', handleReset);
         }, sectionRef);
 
-        return () => ctx.revert();
+        return () => {
+            window.removeEventListener('ditherRevealComplete', handleReveal);
+            window.removeEventListener('ditherRevealReset', handleReset);
+            ctx.revert();
+        };
     }, []);
 
     return (
@@ -82,3 +95,4 @@ export default function Sobre() {
         </section >
     );
 }
+

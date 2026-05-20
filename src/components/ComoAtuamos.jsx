@@ -129,8 +129,6 @@ export default function ComoAtuamos() {
             {/* Subtle background shader repurposed from Hero */}
             <div className="absolute inset-0 z-0 opacity-[0.05] pointer-events-none" style={{ mixBlendMode: 'screen' }}>
                 <DitheringShader
-                    width={typeof window !== 'undefined' ? window.innerWidth : 1920}
-                    height={typeof window !== 'undefined' ? window.innerHeight : 1080}
                     shape="ripple"
                     type="2x2"
                     colorBack="#000000"
@@ -141,7 +139,7 @@ export default function ComoAtuamos() {
                 />
             </div>
 
-            <div className="brand-gradient-divider absolute top-0 left-0 z-10"></div>
+            
 
             <div className="max-w-7xl mx-auto px-6 lg:px-20 relative z-10">
                 <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1 mb-8 inline-block">
@@ -205,3 +203,4 @@ export default function ComoAtuamos() {
         </section>
     );
 }
+

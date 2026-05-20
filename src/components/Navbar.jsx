@@ -7,7 +7,7 @@ export default function Navbar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('');
-    const whatsappHref = 'https://wa.me/5521990230538';
+    const whatsappHref = 'https://wa.me/5521990230538?text=Oi%2C%20tenho%20interesse%20na%20Blink.';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -58,7 +58,7 @@ export default function Navbar() {
                     <img
                         src={isScrolled ? logoPretaCompleta : logoBrancaCompleta}
                         alt="Blink"
-                        className={`w-auto transition-all duration-300 ${isScrolled ? 'h-12 lg:h-14' : 'h-14 lg:h-16'}`}
+                        className={`w-auto transition-all duration-300 ${isScrolled ? 'h-[3.75rem] lg:h-[4.5rem]' : 'h-[4.5rem] lg:h-20'}`}
                     />
                 </div>
 

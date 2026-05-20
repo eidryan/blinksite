@@ -2,21 +2,29 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import luanPhoto from '../assets/founders/luan.jpg';
 import adrianPhoto from '../assets/founders/adrian.jpg';
+import gustavoPhoto from '../assets/founders/gustavo.jpg';
 
 const founders = [
     {
         name: "Luan Carvalho",
         role: "CO-FUNDADOR, DESENVOLVIMENTO",
-        desc: "Arquitetura de sistemas, full-stack e automação. Constrói as ferramentas que a operação pede.",
+        desc: "Traduz problemas reais em sistemas que duram. Lidera a arquitetura e o desenvolvimento de cada produto da Blink, do backend ao deploy.",
         photo: luanPhoto,
         photoPosition: 'center 25%'
     },
     {
         name: "Adrian Villela",
         role: "CO-FUNDADOR, OPERAÇÕES & ESTRATÉGIA",
-        desc: "Engenharia de produção, mapeamento de processos e estratégia de produto. Encontra a dor antes de construir.",
+        desc: "Entra na operação, entende o que falta e define o caminho. Engenharia de produção aplicada a negócios que precisam de ferramenta própria.",
         photo: adrianPhoto,
         photoPosition: 'center 18%'
+    },
+    {
+        name: "Gustavo Ferreira",
+        role: "SÓCIO, DISTRIBUIÇÃO & MARKETING",
+        desc: "Leva o produto até quem precisa. Reels, posts e estratégia de conteúdo para transformar o que a Blink constrói em audiência real.",
+        photo: gustavoPhoto,
+        photoPosition: 'center 20%'
     }
 ];
 
@@ -86,7 +94,7 @@ export default function Fundadores() {
                 </h2>
 
                 {/* Founder cards - side-by-side layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12">
                     {founders.map((founder, i) => (
                         <div
                             key={i}

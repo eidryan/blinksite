@@ -93,24 +93,24 @@ export default function Fundadores() {
                     Quem está por trás.
                 </h2>
 
-                {/* Founder cards - side-by-side layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12">
+                {/* Founder cards - vertical layout */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 lg:gap-12">
                     {founders.map((founder, i) => (
                         <div
                             key={i}
                             ref={el => cardsRef.current[i] = el}
                             onMouseMove={(e) => handleMouseMove(e, i)}
                             onMouseLeave={() => handleMouseLeave(i)}
-                            className="group will-change-transform flex flex-row gap-6 items-start"
+                            className="group will-change-transform flex flex-col gap-5"
                             style={{ transformStyle: 'preserve-3d' }}
                         >
-                            {/* Photo - compact */}
-                            <div className="relative rounded-xl overflow-hidden border border-white/10 group-hover:border-orange/20 transition-colors duration-500 bg-[#1A1A1A] shrink-0 w-[140px] lg:w-[180px]">
+                            {/* Photo - full width */}
+                            <div className="relative rounded-xl overflow-hidden border border-white/10 group-hover:border-orange/20 transition-colors duration-500 bg-[#1A1A1A] w-full">
                                 <div className="h-[2px] w-full brand-gradient opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
                                 <div
                                     className="image-canvas-wrapper relative w-full"
                                     data-canvas="image"
-                                    style={{ aspectRatio: '4 / 5' }}
+                                    style={{ aspectRatio: '3 / 4' }}
                                 >
                                     <img
                                         src={founder.photo}
@@ -123,15 +123,15 @@ export default function Fundadores() {
                                 </div>
                             </div>
 
-                            {/* Bio - more space */}
-                            <div className="flex-1 pt-2">
-                                <h3 className="font-display font-bold text-2xl lg:text-3xl mb-1">
+                            {/* Bio */}
+                            <div>
+                                <h3 className="font-display font-bold text-xl lg:text-2xl mb-1">
                                     {founder.name}
                                 </h3>
                                 <p className="font-mono text-xs text-orange tracking-widest uppercase mb-3">
                                     {founder.role}
                                 </p>
-                                <p className="font-body text-base text-cream/70 leading-relaxed">
+                                <p className="font-body text-sm text-cream/70 leading-relaxed">
                                     {founder.desc}
                                 </p>
                             </div>

@@ -13,7 +13,7 @@ Criar o ambiente onde PMEs encontram o que precisam para crescer, com **autorida
 |---|---|
 | Objetivo primário | Autoridade e marca (qualidade editorial > volume) |
 | Produção de notícias | Pipeline de IA + curadoria humana via Pull Requests |
-| Estado dos papers | Programa de pesquisa real (professor orientador + bolsa), pesquisa ainda não iniciada — lança como "manifesto + em breve" |
+| Estado dos papers | Programa de pesquisa real (professor orientador + bolsa); pesquisa formal ainda não iniciada, mas o Research **lança com a publicação nº 1**: artigo sobre o roteirizador CVRP gratuito |
 | Arquitetura | App Next.js novo servido no domínio principal via rewrites (subpath) |
 | Estrutura de URLs | `/radar` (notícias) e `/research` (papers) como seções irmãs na raiz |
 | Newsletter | Captura de e-mail no MVP via Resend; envio automatizado na Fase 2 |
@@ -39,8 +39,9 @@ Categorias de notícias: Brasil · Mundo · Regulação · Tecnologia · Capital
 
 3. **Research (`/research`)**
    - Manifesto do programa de pesquisa: linha de pesquisa, professor orientador, vínculo acadêmico (bolsa)
-   - Formato das futuras publicações + "primeira publicação em breve"
-   - Template de paper reservado (abstract, autores, data, PDF) estilo Anthropic, usado quando a pesquisa publicar (`/research/[slug]`)
+   - **Publicação nº 1 no lançamento** (`/research/roteirizador-cvrp`): artigo estilo Anthropic sobre o roteirizador CVRP — o problema (PMEs perdem margem com rotas mal planejadas), a ciência (CVRP/otimização combinatória), a solução com stack 100% gratuita (VRPSolverEasy + OSRM + Nominatim), e CTA para usar a ferramenta gratuita (roteirizador.streamlit.app)
+   - Template de paper (abstract, autores, data, PDF opcional) usado pela publicação nº 1 e pelas futuras (`/research/[slug]`)
+   - **Pré-requisito de lançamento:** corrigir o timeout de geocoding do roteirizador em produção (Nominatim 1s falhando no Streamlit Cloud) e aplicar identidade Blink no app — o artigo vai direcionar tráfego para a ferramenta, que precisa funcionar e ter a marca
 
 4. **Newsletter (captura apenas)**
    - E-mail → audiência no Resend
@@ -93,4 +94,5 @@ GitHub Action (cron 2-3x/semana)
 - `/radar` e `/research` no ar sob blinkgroup.com.br, indexáveis pelo Google (sitemap aceito no Search Console).
 - Pelo menos 5 notícias publicadas via pipeline IA→PR→merge funcionando de ponta a ponta.
 - Página Research apresentando o programa de pesquisa com orientador e linha de pesquisa.
+- Publicação nº 1 (roteirizador CVRP) no ar, com a ferramenta funcionando em produção (geocoding corrigido) e com identidade Blink aplicada.
 - Captura de newsletter funcionando (e-mails chegando na audiência do Resend).

@@ -3,11 +3,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/radar", "destination": "https://blink-hub.vercel.app/radar" },
-    { "source": "/radar/:path*", "destination": "https://blink-hub.vercel.app/radar/:path*" },
-    { "source": "/research", "destination": "https://blink-hub.vercel.app/research" },
-    { "source": "/research/:path*", "destination": "https://blink-hub.vercel.app/research/:path*" },
-    { "source": "/sitemap.xml", "destination": "https://blink-hub.vercel.app/sitemap.xml" }
+    { "source": "/radar", "destination": "https://blink-press.vercel.app/radar" },
+    { "source": "/radar/:path*", "destination": "https://blink-press.vercel.app/radar/:path*" },
+    { "source": "/research", "destination": "https://blink-press.vercel.app/research" },
+    { "source": "/research/:path*", "destination": "https://blink-press.vercel.app/research/:path*" },
+    { "source": "/sitemap.xml", "destination": "https://blink-press.vercel.app/sitemap.xml" }
   ],
   "headers": [
     {

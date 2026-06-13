@@ -1,0 +1,5 @@
+- generic [active] [ref=e1]:
+  - button "Log in with GitHub" [ref=e4] [cursor=pointer]:
+    - img [ref=e5]
+    - generic [ref=e8]: Log in with GitHub
+  - alert [ref=e9]

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Blinksite — Como o site funciona (guia do time)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&family=MuseoModerno:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FDFAF4; --dark:#212121; --orange:#FF6A00; --gold:#FFA52E;
+    --red:#F21A1A; --dark-red:#C81010; --mid-orange:#FF8A1C;
+    --grad:linear-gradient(135deg,#FFA52E 0%,#FF6A00 50%,#F21A1A 100%);
+    --ink:#2b2b2b; --muted:#6b6b6b; --line:#e9e3d8;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{
+    margin:0; background:var(--cream); color:var(--ink);
+    font-family:"Plus Jakarta Sans",sans-serif; font-size:15px; line-height:1.7;
+  }
+  .page{max-width:880px; margin:0 auto; padding:0 48px 64px;}
+  h1,h2,h3,h4{font-family:"MuseoModerno",sans-serif; letter-spacing:-0.02em; color:var(--dark); line-height:1.15;}
+  h2{font-size:26px; margin:48px 0 4px; padding-top:18px; border-top:1px solid var(--line);}
+  h2 .num{font-family:"IBM Plex Mono",monospace; font-size:13px; color:var(--orange); display:block; letter-spacing:.18em; margin-bottom:6px; font-weight:400;}
+  h3{font-size:18px; margin:26px 0 6px; color:#1a1a1a;}
+  p{margin:8px 0;}
+  a{color:var(--orange); text-decoration:none;}
+  code{font-family:"IBM Plex Mono",monospace; font-size:.86em; background:#f3ede2; padding:1.5px 5px; border-radius:4px; color:var(--dark-red);}
+  .kicker{font-family:"IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.22em; font-size:11px; color:var(--orange);}
+  .lead{font-size:17px; color:#333;}
+  strong{color:#111;}
+  em.t{font-style:normal; font-weight:600; color:var(--orange);}
+
+  .cover{background:var(--dark); color:var(--cream); padding:72px 48px 60px; position:relative; overflow:hidden;}
+  .cover::after{content:""; position:absolute; left:0; right:0; bottom:0; height:5px; background:var(--grad);}
+  .cover .dot{display:inline-block; width:11px; height:11px; border-radius:50%; background:var(--grad); margin-right:10px; vertical-align:middle;}
+  .cover .brand{font-family:"IBM Plex Mono",monospace; letter-spacing:.35em; font-size:13px; text-transform:uppercase;}
+  .cover h1{color:var(--cream); font-size:clamp(32px,6vw,52px); font-weight:800; margin:26px 0 10px; max-width:16ch;}
+  .cover h1 em{font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;}
+  .cover .sub{color:rgba(253,250,244,.72); font-size:18px; max-width:48ch;}
+  .cover .meta{margin-top:34px; font-family:"IBM Plex Mono",monospace; font-size:12px; color:rgba(253,250,244,.55); letter-spacing:.05em;}
+
+  .tag{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--orange); border:1px solid rgba(255,106,0,.35); border-radius:999px; padding:3px 11px; margin-bottom:6px;}
+  table{width:100%; border-collapse:collapse; margin:14px 0; font-size:13.5px;}
+  th,td{text-align:left; padding:9px 12px; border-bottom:1px solid var(--line); vertical-align:top;}
+  th{font-family:"IBM Plex Mono",monospace; font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); background:#f6f0e6;}
+  tr:nth-child(even) td{background:#faf6ee;}
+  ul,ol{margin:8px 0; padding-left:22px;}
+  li{margin:6px 0;}
+
+  pre{background:var(--dark); color:#f0ece4; font-family:"IBM Plex Mono",monospace; font-size:12.5px; line-height:1.55; padding:18px 20px; border-radius:12px; overflow-x:auto; margin:14px 0;}
+  pre .c{color:#8a8a8a;}
+  pre .o{color:var(--gold);}
+
+  .card{background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 22px; margin:14px 0;}
+  .note{border-left:3px solid var(--orange); background:#fff7f0; padding:12px 16px; border-radius:0 10px 10px 0; margin:14px 0; font-size:14px;}
+  .warn{border-left:3px solid var(--red); background:#fff1f1; padding:12px 16px; border-radius:0 10px 10px 0; margin:14px 0; font-size:14px;}
+  .analogy{background:#fffdf8; border:1px solid var(--line); border-left:3px solid var(--gold); padding:12px 16px; border-radius:0 10px 10px 0; margin:14px 0; font-size:14px;}
+  .analogy b{color:var(--mid-orange);}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .pill-row{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0;}
+  .pill{font-family:"IBM Plex Mono",monospace; font-size:12px; background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 12px;}
+
+  .toc{columns:2; column-gap:40px; font-size:14px; margin:10px 0 4px;}
+  .toc a{color:#333; display:block; padding:4px 0; border-bottom:1px dotted var(--line);}
+  .toc .n{color:var(--orange); font-family:"IBM Plex Mono",monospace; font-size:11px; margin-right:8px;}
+
+  .glossary dt{font-family:"IBM Plex Mono",monospace; color:var(--dark-red); font-size:13px; margin-top:12px; font-weight:700;}
+  .glossary dd{margin:2px 0 0; padding-left:0;}
+
+  footer.docfoot{margin-top:48px; padding-top:18px; border-top:1px solid var(--line); font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; display:flex; justify-content:space-between;}
+
+  @media print{
+    @page{size:A4; margin:16mm 0;}
+    body{font-size:11.5pt;}
+    .page,.cover{max-width:none;}
+    .cover{padding:40px 22mm;}
+    .page{padding:0 22mm;}
+    h2,h3{break-after:avoid;}
+    pre,table,.card,.note,.warn,.analogy{break-inside:avoid;}
+    .pagebreak{break-before:page;}
+    .no-print{display:none;}
+    a{color:var(--ink);}
+  }
+  .hint{margin:0 auto; max-width:880px; padding:14px 48px 0;}
+  .hint .box{background:#fff; border:1px dashed var(--orange); border-radius:10px; padding:10px 16px; font-size:13px; color:#555;}
+</style>
+</head>
+<body>
+
+<div class="hint no-print">
+  <div class="box">💡 Para gerar o PDF: abra este arquivo no navegador e use <strong>Ctrl/Cmd + P → “Salvar como PDF”</strong> (ative “Gráficos de plano de fundo”).</div>
+</div>
+
+<!-- ===================== CAPA ===================== -->
+<section class="cover">
+  <div class="brand"><span class="dot"></span>BLINK · TECNOLOGIA</div>
+  <h1>Blinksite — <em>como o nosso site funciona</em></h1>
+  <p class="sub">Um guia para o time entender, por dentro, o site da Blink: o que é, como foi montado e por que cada escolha foi feita. Escrito de forma direta — você não precisa ser dev sênior para acompanhar.</p>
+  <div class="meta">Atualizado em 14/06/2026 · Público: time de marketing + dev · Nível: introdutório</div>
+</section>
+
+<div class="page">
+
+  <!-- COMO LER -->
+  <div class="note" style="margin-top:26px;">
+    <strong>Como ler este guia.</strong> Sempre que aparecer um termo técnico, ele vem explicado na hora — e tem um <a href="#dic">dicionário rápido no final</a>. As caixas <b style="color:var(--mid-orange)">amarelas</b> trazem analogias do dia a dia para fixar a ideia. Não precisa ler tudo de uma vez: use o sumário abaixo.
+  </div>
+
+  <!-- SUMÁRIO -->
+  <h2><span class="num">SUMÁRIO</span>O que tem aqui</h2>
+  <div class="toc">
+    <a href="#oque"><span class="n">01</span>O que é o site</a>
+    <a href="#pecas"><span class="n">02</span>As peças que montam o site</a>
+    <a href="#dois"><span class="n">03</span>Dois sites em um só endereço</a>
+    <a href="#scroll"><span class="n">04</span>Por que o scroll é tão “vivo”</a>
+    <a href="#secoes"><span class="n">05</span>Passeio pelas seções</a>
+    <a href="#detalhes"><span class="n">06</span>Os detalhes que dão o “uau”</a>
+    <a href="#marca"><span class="n">07</span>A cara da marca (cores e fontes)</a>
+    <a href="#publicar"><span class="n">08</span>Como o site vai pro ar</a>
+    <a href="#limpeza"><span class="n">09</span>O que dá pra limpar</a>
+    <a href="#melhorar"><span class="n">10</span>O que dá pra melhorar</a>
+    <a href="#rodar"><span class="n">11</span>Como abrir o projeto na sua máquina</a>
+    <a href="#dic"><span class="n">12</span>Dicionário rápido</a>
+  </div>
+
+  <!-- ===================== 01 ===================== -->
+  <h2 id="oque"><span class="num">01</span>O que é o site</h2>
+  <p class="lead">É o site institucional da <strong>Blink</strong> — a nossa “vitrine” na internet. Conta quem somos: entramos na operação de pequenos negócios, entendemos a dor real e construímos ferramentas sob medida, que depois viram produtos próprios (como o <em>Cadencio</em>).</p>
+  <p>Na prática, é <strong>uma página só</strong> que você percorre rolando de cima a baixo. Não tem “navegação entre páginas” por dentro — os links do menu (Sobre, Como Atuamos…) só te levam para um ponto mais abaixo na mesma página. Isso é o que se chama de <em class="t">SPA</em> (<em>single-page application</em>, ou “aplicação de página única”).</p>
+  <p>As únicas exceções são <code>/radar</code> e <code>/research</code>: essas duas áreas de conteúdo <strong>não fazem parte deste projeto</strong> — elas vêm de outro sistema e aparecem “coladas” no mesmo endereço (explico na seção 03).</p>
+  <div class="analogy"><b>Analogia:</b> pense no site como um <b>panfleto digital de rolagem infinita</b>, caprichado e animado. O conteúdo de Radar/Research é como um encarte de outra gráfica que a gente grampeia no mesmo panfleto.</div>
+
+  <!-- ===================== 02 ===================== -->
+  <h2 id="pecas"><span class="num">02</span>As peças que montam o site</h2>
+  <p>O site é feito de “blocos” de tecnologia. Você não precisa decorar — só saber o papel de cada um:</p>
+  <table>
+    <tr><th>Peça</th><th>Para que serve, em português claro</th></tr>
+    <tr><td>React</td><td>Organiza a tela em pedaços reutilizáveis (“componentes”): a navbar, o rodapé, cada seção. Cada arquivo cuida de um pedaço.</td></tr>
+    <tr><td>Vite</td><td>A “ferramenta de obra”. Roda o site na sua máquina enquanto você edita e empacota tudo no final. É rápido.</td></tr>
+    <tr><td>Tailwind</td><td>Um jeito de estilizar escrevendo classes direto no HTML (ex.: <code>text-orange</code>, <code>rounded-full</code>). Acelera muito o visual.</td></tr>
+    <tr><td>GSAP</td><td>O motor de <strong>animação</strong>. Tudo que se move, aparece, encolhe ou gira no scroll passa por ele.</td></tr>
+    <tr><td>Lenis</td><td>Deixa o scroll <strong>suave e com inércia</strong> (aquele deslize gostoso, em vez do scroll “seco” padrão).</td></tr>
+    <tr><td>Three.js</td><td>Desenha os <strong>efeitos gráficos pesados</strong> (os fundos “pixelados” e o efeito colorido nas fotos). Usa a placa de vídeo do computador.</td></tr>
+    <tr><td>Vercel</td><td>O serviço que hospeda o site e o coloca no ar (deploy).</td></tr>
+  </table>
+  <div class="analogy"><b>Analogia:</b> se o site fosse um <b>filme</b>: <b>React</b> é o roteiro dividido em cenas, <b>Tailwind</b> é o figurino, <b>GSAP</b> é o diretor que comanda os movimentos, <b>Lenis</b> é a câmera deslizante, <b>Three.js</b> são os efeitos especiais e a <b>Vercel</b> é o cinema que exibe.</div>
+
+  <!-- ===================== 03 ===================== -->
+  <h2 id="dois"><span class="num">03</span>Dois sites em um só endereço</h2>
+  <p>Existem, na verdade, <strong>dois projetos diferentes</strong> que o visitante enxerga como um só:</p>
+  <ul>
+    <li><strong>Este projeto (blinksite):</strong> a home institucional, com toda a animação.</li>
+    <li><strong>blink-press (outro projeto):</strong> as áreas <code>/radar</code> (notícias para PMEs) e <code>/research</code> (artigos), além do formulário de newsletter.</li>
+  </ul>
+  <p>Quando alguém acessa <code>blinkgroup.com.br/radar</code>, a Vercel “busca” esse conteúdo no outro projeto e mostra <strong>sem mudar o endereço na barra</strong>. Esse truque se chama <em class="t">rewrite</em> (“reescrita de rota”).</p>
+<pre>          blinkgroup.com.br
+                 │
+        ┌────────┴───────────────┐
+        ▼                        ▼
+   home institucional      /radar e /research
+   (ESTE projeto)          (vêm do blink-press,
+                            via "rewrite")</pre>
+  <div class="analogy"><b>Analogia:</b> é como um <b>shopping</b>. A fachada e os corredores são a nossa home. Mas a loja “Radar” e a loja “Research” são operadas por outra equipe — só que, de dentro, o cliente nem percebe a diferença.</div>
+  <div class="note"><strong>Por que separar?</strong> Assim a home fica leve e focada em design/animação, e a parte de conteúdo (que precisa de um sistema de edição de textos) evolui no seu próprio ritmo, sem atrapalhar uma a outra.</div>
+
+  <!-- ===================== 04 ===================== -->
+  <h2 id="scroll"><span class="num">04</span>Por que o scroll é tão “vivo”</h2>
+  <p>O grande diferencial do site é a sensação ao rolar a página. Quase tudo isso é orquestrado em um arquivo central (<code>App.jsx</code>). Quatro coisas acontecem conforme você desce:</p>
+  <h3>1. A tela de abertura (loader)</h3>
+  <p>Ao entrar, aparece o logo que cresce, sobe e some. Tem uma “rede de segurança”: se algo demorar, depois de 2,5 segundos o conteúdo aparece de qualquer jeito — o visitante <strong>nunca</strong> fica preso numa tela travada.</p>
+  <h3>2. O fundo muda de cor sozinho</h3>
+  <p>Cada seção é marcada como “clara” ou “escura”. Quando ela chega no meio da tela, o fundo do site transiciona suavemente entre o creme e o grafite. <strong>Detalhe útil pro dev:</strong> para uma seção nova entrar nesse sistema, basta marcá-la com <code>data-theme="dark"</code> ou <code>"light"</code> — o resto é automático.</p>
+  <h3>3. O “túnel” que revela a próxima seção</h3>
+  <p>Logo depois do topo, a seção “Sobre” <strong>abre como um círculo que cresce</strong> por cima da abertura, num efeito de portal. É o ponto mais elaborado do site.</p>
+  <h3>4. Reações à velocidade</h3>
+  <p>O site <strong>sente a velocidade do seu scroll</strong>. Rolou rápido? As imagens dão uma leve “entortada”, os títulos esticam um pouquinho, a navbar borra mais. São microdetalhes que dão a sensação de “premium”.</p>
+  <div class="analogy"><b>Analogia:</b> o site se comporta como um <b>carro com suspensão boa</b> — ele responde ao seu jeito de dirigir (rolar). Acelerou? Ele reage. Parou? Ele assenta com calma.</div>
+
+  <div class="pagebreak"></div>
+
+  <!-- ===================== 05 ===================== -->
+  <h2 id="secoes"><span class="num">05</span>Passeio pelas seções</h2>
+  <p>De cima para baixo, na ordem em que aparecem:</p>
+  <div class="card"><span class="tag">Navbar (menu fixo)</span><p>Fica sempre no topo, em formato de “pílula”. Transparente sobre a abertura escura e branquinha depois. Destaca em laranja a seção onde você está. Tem o botão <strong>“Fale Conosco”</strong> que abre o WhatsApp.</p></div>
+  <div class="card"><span class="tag">Abertura / Hero</span><p>A primeira tela, escura, com o título <em>“Decida em um piscar de olhos.”</em> e um fundo gráfico animado. O texto entra com um leve desfoque que se dissolve.</p></div>
+  <div class="card" style="border-color:var(--orange)"><span class="tag">O “túnel” ⭐</span><p>A transição em portal entre a abertura e a seção “Sobre”. É o efeito mais bonito e também o mais delicado do código — mexer aqui exige cuidado.</p></div>
+  <div class="grid2">
+    <div class="card"><span class="tag">01 · Sobre</span><p>Quem é a Blink. O texto surge palavra por palavra quando o portal abre.</p></div>
+    <div class="card"><span class="tag">02 · Como Atuamos</span><p>3 cards com o método. No computador, eles deslizam <strong>na horizontal</strong> conforme você rola; no celular, viram uma pilha vertical.</p></div>
+    <div class="card"><span class="tag">03 · Portfólio</span><p>Destaque para o <strong>Cadencio</strong> (com selo “ATIVO”). O card inclina levemente seguindo o mouse. Tem espaços “em desenvolvimento” pros próximos produtos.</p></div>
+    <div class="card"><span class="tag">04 · Fundadores</span><p>Os 3 sócios, com foto e bio. As fotos ganham um efeito colorido no hover. Fecha com a citação do livro <em>Blink</em> (de onde vem o nome).</p></div>
+  </div>
+  <div class="card"><span class="tag">05 · Contato (rodapé)</span><p>Convite final “Vamos conversar.” com WhatsApp, e-mail e LinkedIn.</p></div>
+  <div class="note"><strong>Dica pro time de conteúdo:</strong> os textos dos fundadores, dos cards de método e do portfólio ficam em listas no início de cada arquivo — são fáceis de localizar e editar, mesmo para quem tem pouca experiência com código.</div>
+
+  <!-- ===================== 06 ===================== -->
+  <h2 id="detalhes"><span class="num">06</span>Os detalhes que dão o “uau”</h2>
+  <p>Três efeitos rodam o tempo todo, por trás de tudo:</p>
+  <table>
+    <tr><th>Efeito</th><th>O que faz</th></tr>
+    <tr><td>Cursor da marca</td><td>No computador, troca a setinha por um anel + ponto com gradiente que mostram “Ver”, “Abrir” ou “Arrastar” conforme o que está embaixo. No celular fica o toque normal.</td></tr>
+    <tr><td>Fotos reativas</td><td>As fotos dos fundadores ganham um leve “glitch” colorido ao passar o mouse (efeito de placa de vídeo).</td></tr>
+    <tr><td>Reação à velocidade</td><td>Entorta imagens, estica títulos e borra a navbar conforme a rapidez do scroll.</td></tr>
+  </table>
+  <div class="note"><strong>O outro lado da moeda.</strong> Esses detalhes são o charme do site, mas também a parte que mais consome processamento. Por isso vários deles são <strong>desligados no celular</strong>, onde pesariam demais. É um equilíbrio consciente entre “bonito” e “rápido”.</div>
+
+  <!-- ===================== 07 ===================== -->
+  <h2 id="marca"><span class="num">07</span>A cara da marca (cores e fontes)</h2>
+  <p>As cores e fontes ficam <strong>num lugar só</strong>, então mudar a identidade é simples e seguro (não precisa caçar em mil arquivos):</p>
+  <div class="pill-row">
+    <span class="pill" style="background:#FDFAF4">creme #FDFAF4</span>
+    <span class="pill" style="background:#212121;color:#fff">grafite #212121</span>
+    <span class="pill" style="background:#FF6A00;color:#fff">laranja #FF6A00</span>
+    <span class="pill" style="background:#FFA52E">dourado #FFA52E</span>
+    <span class="pill" style="background:#F21A1A;color:#fff">vermelho #F21A1A</span>
+  </div>
+  <p><strong>Fontes:</strong> <em>MuseoModerno</em> nos títulos, <em>Plus Jakarta Sans</em> nos textos, <em>IBM Plex Mono</em> (aquela “de máquina de escrever”) nos rótulos pequenos. O <strong>gradiente laranja→vermelho</strong> é a assinatura visual — aparece em botões, linhas divisórias e textos de destaque.</p>
+
+  <!-- ===================== 08 ===================== -->
+  <h2 id="publicar"><span class="num">08</span>Como o site vai pro ar</h2>
+  <p>Quem hospeda é a <strong>Vercel</strong>. Além de servir o site, ela cuida de três coisas que valem conhecer:</p>
+  <ul>
+    <li><strong>Os “rewrites”</strong> que colam o Radar/Research da seção 03.</li>
+    <li><strong>Segurança:</strong> cabeçalhos que protegem contra alguns ataques comuns (impedem, por exemplo, que o site seja “embutido” em páginas falsas).</li>
+    <li><strong>Velocidade:</strong> os arquivos de imagem/estilo ficam guardados em cache por bastante tempo, então quem já visitou carrega mais rápido.</li>
+  </ul>
+  <div class="warn"><strong>Cuidado conhecido:</strong> se um dia o endereço do projeto <code>blink-press</code> mudar, é preciso atualizar os “rewrites” <em>junto</em> com as configurações de login do editor de conteúdo — já houve um errinho assim no passado. Está documentado no arquivo de status do blink-press.</div>
+
+  <!-- ===================== 09 ===================== -->
+  <h2 id="limpeza"><span class="num">09</span>O que dá pra limpar (sem risco)</h2>
+  <p>Durante a análise encontramos “gavetas esquecidas” — arquivos que <strong>não são usados</strong> pelo site e podem ser removidos para deixar o projeto mais enxuto:</p>
+  <ul>
+    <li>Alguns componentes de efeito que nunca foram ligados (mais de 1.000 linhas no total).</li>
+    <li>Imagens e scripts de teste antigos jogados na raiz do projeto.</li>
+    <li>O projeto ainda se chama internamente <code>"blink-temp"</code> (nome temporário que ficou) — vale renomear para <code>blinksite</code>.</li>
+  </ul>
+  <div class="note">Limpeza é segura: nada disso aparece no site no ar. Só reduz a “bagunça” para quem for editar no futuro.</div>
+
+  <!-- ===================== 10 ===================== -->
+  <h2 id="melhorar"><span class="num">10</span>O que dá pra melhorar (sugestões)</h2>
+  <p>Em ordem de “maior retorno com menor esforço”:</p>
+  <ol>
+    <li><strong>SEO (aparecer melhor no Google e no WhatsApp):</strong> hoje o site quase não tem “cartão de visita” para compartilhamento (a imagem e o texto que aparecem ao colar o link). É a melhoria de <strong>maior impacto para marketing</strong>.</li>
+    <li><strong>Respeitar quem prefere menos animação:</strong> alguns sistemas/usuários pedem “reduzir movimento” por acessibilidade — vale atender, e ainda ajuda a nota de performance.</li>
+    <li><strong>Acessibilidade:</strong> melhorar navegação por teclado e contraste em alguns pontos.</li>
+    <li><strong>Performance no celular:</strong> carregar os efeitos pesados só quando realmente necessários.</li>
+    <li><strong>Limpeza de código</strong> (seção 09).</li>
+  </ol>
+  <div class="analogy"><b>Para o time de marketing:</b> a sugestão nº 1 (SEO + cartão de compartilhamento) é a que mais mexe com <b>visibilidade e cliques</b>. Se for priorizar uma, comece por ela.</div>
+
+  <!-- ===================== 11 ===================== -->
+  <h2 id="rodar"><span class="num">11</span>Como abrir o projeto na sua máquina</h2>
+  <p>Para quem quer experimentar (precisa ter o <strong>Node.js 20</strong> instalado):</p>
+<pre>npm install      <span class="c"># baixa as dependências (faça uma vez)</span>
+npm run dev      <span class="c"># abre o site em http://localhost:5173</span>
+npm run build    <span class="c"># gera a versão final, pronta pra publicar</span></pre>
+  <p>Depois de <code>npm run dev</code>, é só abrir o endereço no navegador — qualquer alteração no código aparece na tela na hora.</p>
+
+  <!-- ===================== 12 ===================== -->
+  <h2 id="dic"><span class="num">12</span>Dicionário rápido</h2>
+  <dl class="glossary">
+    <dt>SPA</dt><dd>“Single-page application”. Um site que é uma página só; a navegação acontece dentro dela, sem recarregar.</dd>
+    <dt>Componente</dt><dd>Um pedaço reutilizável da tela (ex.: a navbar). Cada um mora em seu próprio arquivo.</dd>
+    <dt>Deploy</dt><dd>O ato de “colocar no ar” / publicar o site.</dd>
+    <dt>Rewrite</dt><dd>Mostrar, em um endereço, um conteúdo que na verdade vem de outro lugar — sem mudar a URL na barra.</dd>
+    <dt>Scroll</dt><dd>A rolagem da página. Aqui ele é “suave” (com inércia) e dispara animações.</dd>
+    <dt>Hover</dt><dd>Quando você passa o mouse por cima de algo (sem clicar).</dd>
+    <dt>Shader / WebGL</dt><dd>Técnica que usa a placa de vídeo para desenhar gráficos avançados (os fundos pixelados e o efeito das fotos).</dd>
+    <dt>Cache</dt><dd>Guardar arquivos já baixados para a próxima visita carregar mais rápido.</dd>
+    <dt>SEO</dt><dd>Ajustes para o site ser bem encontrado/exibido em buscadores e redes (título, descrição, imagem de compartilhamento).</dd>
+    <dt>Cabeçalhos de segurança</dt><dd>Regras que o servidor envia para proteger o site de alguns golpes comuns.</dd>
+  </dl>
+
+  <footer class="docfoot">
+    <span>Blink Tecnologia · Rio de Janeiro</span>
+    <span>Guia do time · blinksite</span>
+  </footer>
+
+</div>
+</body>
+</html>

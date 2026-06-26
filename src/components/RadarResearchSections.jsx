@@ -101,7 +101,7 @@ export default function RadarResearchSections() {
                         id={section.id}
                         ref={(element) => { sectionRefs.current[index] = element; }}
                         data-theme={section.theme}
-                        className={`relative overflow-hidden px-6 py-28 lg:px-20 lg:py-32 ${isDark ? 'bg-dark text-cream' : 'bg-cream text-dark'}`}
+                        className={`relative overflow-hidden px-6 py-20 lg:px-20 lg:py-24 ${isDark ? 'bg-dark text-cream' : 'bg-cream text-dark'}`}
                     >
                         <div className="brand-gradient-divider absolute top-0 left-0" />
 
@@ -110,7 +110,7 @@ export default function RadarResearchSections() {
                                 ref={(element) => { panelRefs.current[index] = element; }}
                                 onMouseMove={(event) => handleMouseMove(event, index)}
                                 onMouseLeave={() => handleMouseLeave(index)}
-                                className={`group relative flex w-full max-w-[980px] flex-col justify-between overflow-hidden rounded-[2rem] border p-8 shadow-2xl will-change-transform md:p-12 lg:aspect-square lg:p-16 ${isDark
+                                className={`group relative flex w-full max-w-[980px] flex-col justify-between overflow-hidden rounded-[2rem] border p-8 shadow-2xl will-change-transform md:p-10 lg:p-12 ${isDark
                                     ? 'border-white/10 bg-[#181818] text-cream shadow-black/30'
                                     : 'border-dark/10 bg-[#FFF8EA] text-dark shadow-orange/10'
                                     }`}
@@ -131,21 +131,21 @@ export default function RadarResearchSections() {
                                     </div>
                                 </div>
 
-                                <div className="relative z-10 my-16 max-w-2xl lg:my-0">
-                                    <p className={`mb-6 font-mono text-xs uppercase tracking-[0.18em] ${isDark ? 'text-[#FF8A1C]' : 'text-orange'}`}>
+                                <div className="relative z-10 my-8 max-w-3xl md:my-10 lg:my-12">
+                                    <p className={`mb-4 font-mono text-xs uppercase tracking-[0.18em] ${isDark ? 'text-[#FF8A1C]' : 'text-orange'}`}>
                                         {section.eyebrow}
                                     </p>
 
-                                    <h2 className={`font-display text-4xl font-semibold leading-tight md:text-5xl lg:text-6xl ${isDark ? 'text-cream' : 'text-dark'}`} style={{ textWrap: 'balance' }}>
+                                    <h2 className={`font-display text-3xl font-semibold leading-tight md:text-4xl lg:text-5xl ${isDark ? 'text-cream' : 'text-dark'}`} style={{ textWrap: 'balance' }}>
                                         {section.title}
                                     </h2>
 
-                                    <p className={`mt-8 max-w-xl font-body text-lg leading-relaxed md:text-xl ${isDark ? 'text-cream/70' : 'text-dark/70'}`}>
+                                    <p className={`mt-6 max-w-2xl font-body text-base leading-relaxed md:text-lg ${isDark ? 'text-cream/70' : 'text-dark/70'}`}>
                                         {section.body}
                                     </p>
                                 </div>
 
-                                <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+                                <div className="relative z-10 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                                     <div className="flex flex-wrap gap-3">
                                         {section.notes.map((note) => (
                                             <span
@@ -171,10 +171,6 @@ export default function RadarResearchSections() {
                                         {section.cta}
                                         <ArrowUpRight size={18} strokeWidth={2} />
                                     </a>
-                                </div>
-
-                                <div className={`pointer-events-none absolute right-8 top-1/2 hidden -translate-y-1/2 font-mono text-[5.5rem] font-bold tracking-[0.2em] opacity-[0.035] lg:block ${isDark ? 'text-cream' : 'text-dark'}`}>
-                                    {section.accent}
                                 </div>
                             </div>
                         </div>

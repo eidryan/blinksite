@@ -8,8 +8,8 @@
 - [x] Get approval on the revised Research copy before implementation.
 - [x] Write the approved design spec in `docs/superpowers/specs/`.
 - [x] Create the implementation plan with verification steps.
-- [ ] Implement only after plan approval.
-- [ ] Verify with build and browser-level review.
+- [x] Implement only after plan approval.
+- [x] Verify with build and browser-level review.
 
 ## Current Findings
 
@@ -49,4 +49,9 @@ Use the "Radar -> Research as a knowledge journey" approach, but split across se
 - Design spec written: `docs/superpowers/specs/2026-06-26-blink-home-radar-research-design.md`.
 - Gemini execution plan written: `docs/superpowers/plans/2026-06-26-blink-home-radar-research-gemini.md`.
 - Spec self-review passed: no placeholders, no conflicting section order, and UFF appears only as a forbidden-copy rule.
-- No implementation has been started.
+- Implemented separate `04. Radar` and `05. Research` sections after `Portfolio`.
+- Moved `Fundadores` to `06. Fundadores`.
+- Navbar now anchors to `#radar` and `#research`; section CTAs navigate to `/radar` and `/research`.
+- Verified with `npm run verify:home-radar-research`.
+- Verified with `npm run build`.
+- Browser-reviewed desktop and mobile layouts locally.

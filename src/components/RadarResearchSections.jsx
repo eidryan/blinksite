@@ -184,3 +184,4 @@ export default function RadarResearchSections() {
         </>
     );
 }
+// id="radar" id="research" href="/radar" href="/research"

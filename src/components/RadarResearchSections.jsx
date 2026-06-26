@@ -65,20 +65,20 @@ export default function RadarResearchSections() {
             if (isDesktop) {
                 // DESKTOP animation sequence
 
-                // 1. Entrance reveal for the first card (#radar) when it enters the viewport
+                // 1. Entrance reveal for the first card (#radar) — subtle scale + fade
                 const radarPanel = panelRefs.current[0];
                 if (radarPanel) {
                     gsap.fromTo(radarPanel, 
-                        { y: 80, x: -60, opacity: 0 },
+                        { y: 40, scale: 0.96, opacity: 0 },
                         {
                             y: 0,
-                            x: 0,
+                            scale: 1,
                             opacity: 1,
-                            duration: 1.2,
-                            ease: 'power3.out',
+                            duration: 1,
+                            ease: 'power2.out',
                             scrollTrigger: {
                                 trigger: sectionRefs.current[0],
-                                start: 'top 75%',
+                                start: 'top 80%',
                                 toggleActions: 'play none none reverse',
                                 invalidateOnRefresh: true,
                             }
@@ -86,7 +86,7 @@ export default function RadarResearchSections() {
                     );
                 }
 
-                // 2. Pin the first section (#radar)
+                // 2. Pin the first section (#radar) so research slides over it
                 ScrollTrigger.create({
                     trigger: sectionRefs.current[0],
                     pin: true,
@@ -96,36 +96,37 @@ export default function RadarResearchSections() {
                     invalidateOnRefresh: true,
                 });
 
-                // 3. Scale down and fade out the first card (#radar) as the second section (#research) scrolls over it
+                // 3. Fade out + scale down the first card as research covers it
                 if (radarPanel) {
                     gsap.to(radarPanel, {
-                        scale: 0.92,
-                        opacity: 0.5,
+                        scale: 0.9,
+                        opacity: 0.3,
+                        filter: 'blur(4px)',
                         ease: 'none',
                         scrollTrigger: {
                             trigger: sectionRefs.current[1],
                             start: 'top bottom',
-                            end: 'top top',
+                            end: 'top 30%',
                             scrub: true,
                             invalidateOnRefresh: true,
                         }
                     });
                 }
 
-                // 4. Entrance reveal for the second card (#research)
+                // 4. Entrance reveal for the second card (#research) — scrub-driven slide-up
                 const researchPanel = panelRefs.current[1];
                 if (researchPanel) {
                     gsap.fromTo(researchPanel,
-                        { y: 120, x: 60, opacity: 0 },
+                        { y: 60, scale: 0.96, opacity: 0 },
                         {
                             y: 0,
-                            x: 0,
+                            scale: 1,
                             opacity: 1,
-                            duration: 1.2,
-                            ease: 'power3.out',
+                            duration: 1,
+                            ease: 'power2.out',
                             scrollTrigger: {
                                 trigger: sectionRefs.current[1],
-                                start: 'top 75%',
+                                start: 'top 80%',
                                 toggleActions: 'play none none reverse',
                                 invalidateOnRefresh: true,
                             }
@@ -133,26 +134,20 @@ export default function RadarResearchSections() {
                     );
                 }
             } else {
-                // MOBILE fallback: standard non-sticky entrance fade-and-slide animations
+                // MOBILE: clean vertical-only fade-up (no x offset to avoid overflow clipping)
                 panelRefs.current.forEach((panel, index) => {
                     if (!panel) return;
-                    const isRight = contentSections[index].align === 'right';
 
                     gsap.fromTo(panel,
-                        { 
-                            y: 80, 
-                            x: isRight ? 50 : -50, 
-                            opacity: 0 
-                        },
+                        { y: 50, opacity: 0 },
                         {
                             y: 0,
-                            x: 0,
                             opacity: 1,
-                            duration: 1.2,
-                            ease: 'power3.out',
+                            duration: 1,
+                            ease: 'power2.out',
                             scrollTrigger: {
                                 trigger: sectionRefs.current[index],
-                                start: 'top 75%',
+                                start: 'top 85%',
                                 toggleActions: 'play none none reverse',
                                 invalidateOnRefresh: true,
                             }

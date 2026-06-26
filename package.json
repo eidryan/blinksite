@@ -10,7 +10,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "verify:home-radar-research": "node scripts/verify-home-radar-research.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

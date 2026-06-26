@@ -7,7 +7,7 @@
 - [x] Propose 2-3 design approaches for the square, including layout, copy, CTA behavior, and header animation impact.
 - [x] Get approval on the revised Research copy before implementation.
 - [x] Write the approved design spec in `docs/superpowers/specs/`.
-- [ ] Create the implementation plan with verification steps.
+- [x] Create the implementation plan with verification steps.
 - [ ] Implement only after plan approval.
 - [ ] Verify with build and browser-level review.
 
@@ -47,5 +47,6 @@ Use the "Radar -> Research as a knowledge journey" approach, but split across se
 ## Review
 
 - Design spec written: `docs/superpowers/specs/2026-06-26-blink-home-radar-research-design.md`.
+- Gemini execution plan written: `docs/superpowers/plans/2026-06-26-blink-home-radar-research-gemini.md`.
 - Spec self-review passed: no placeholders, no conflicting section order, and UFF appears only as a forbidden-copy rule.
 - No implementation has been started.

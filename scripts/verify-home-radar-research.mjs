@@ -37,8 +37,8 @@ expectOrder('App renders founders after sections', app, '<RadarResearchSections 
 
 expectIncludes('Radar section id exists', sections, 'id="radar"');
 expectIncludes('Research section id exists', sections, 'id="research"');
-expectIncludes('Radar label exists', sections, '04. Radar');
-expectIncludes('Research label exists', sections, '05. Research');
+expectIncludes('Radar eyebrow exists', sections, 'Sinais de mercado para PMEs');
+expectIncludes('Research eyebrow exists', sections, 'Papers, pesquisas e ferramentas aplicadas');
 expectIncludes('Radar headline exists', sections, 'O que está mudando no mercado, antes de virar consenso.');
 expectIncludes('Research headline exists', sections, 'Pesquisa aplicada para aproximar academia e mercado.');
 expectIncludes('Research approved copy exists', sections, 'O ambiente onde a Blink aproxima as PMEs brasileiras do que está sendo produzido na academia: papers, pesquisas e ferramentas aplicadas que podem sair do laboratório e virar decisão, operação e produto no mercado real.');

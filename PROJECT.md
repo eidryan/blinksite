@@ -14,6 +14,7 @@
 | # | Name | Scope | Dependencies | Status |
 |---|------|-------|-------------|--------|
 | 1 | Redesign Radar & Research cards | Adjust card container styling in `RadarResearchSections.jsx` for compact layout, remove background text accents, keep GSAP animation and `data-theme`. Rename Founders section header in `Fundadores.jsx` from `04` to `06`. | None | DONE |
+| 2 | Glassmorphism & Sticky Stacking | Refactor Radar & Research sections to adopt Glassmorphism UI card aesthetic and Sticky Stacking scroll transition. | Milestone 1 | IN_PROGRESS |
 
 ## Code Layout
 - `src/components/RadarResearchSections.jsx` - Main cards component.

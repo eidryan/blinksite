@@ -8,6 +8,7 @@ import Hero from './components/Hero';
 import Sobre from './components/Sobre';
 import ComoAtuamos from './components/ComoAtuamos';
 import Portfolio from './components/Portfolio';
+import RadarResearchSections from './components/RadarResearchSections';
 import Fundadores from './components/Fundadores';
 import Footer from './components/Footer';
 import brandLogoCompleteWhite from './assets/brand/LogoBlink_Completa_Branca.png';
@@ -187,6 +188,7 @@ function App() {
           </ScrollRevealSection>
           <ComoAtuamos />
           <Portfolio />
+          <RadarResearchSections />
           <Fundadores />
           <Footer />
         </main>

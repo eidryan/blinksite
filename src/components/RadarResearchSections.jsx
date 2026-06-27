@@ -173,7 +173,7 @@ export default function RadarResearchSections() {
                                     data-editorial-reveal
                                     href={section.href}
                                     data-cursor="action"
-                                    className={`mt-10 inline-flex items-center justify-center gap-3 rounded-full px-7 py-3.5 font-body font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 ${isDark
+                                    className={`mt-10 hidden items-center justify-center gap-3 rounded-full px-7 py-3.5 font-body font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 lg:inline-flex ${isDark
                                         ? 'brand-gradient text-dark hover:scale-[1.02] focus-visible:ring-offset-dark'
                                         : 'bg-dark text-cream hover:bg-dark/90 focus-visible:ring-offset-cream'
                                         }`}
@@ -254,6 +254,19 @@ export default function RadarResearchSections() {
                                         </div>
                                     </div>
                                 </div>
+                            </a>
+
+                            <a
+                                data-editorial-reveal
+                                href={section.href}
+                                data-cursor="action"
+                                className={`inline-flex items-center justify-center gap-3 rounded-full px-7 py-3.5 font-body font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange focus-visible:ring-offset-2 lg:hidden ${isDark
+                                    ? 'brand-gradient text-dark hover:scale-[1.02] focus-visible:ring-offset-dark'
+                                    : 'bg-dark text-cream hover:bg-dark/90 focus-visible:ring-offset-cream'
+                                    }`}
+                            >
+                                {section.cta}
+                                <ArrowUpRight size={18} strokeWidth={2} />
                             </a>
                         </div>
                     </section>

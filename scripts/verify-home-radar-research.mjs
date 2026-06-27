@@ -31,6 +31,15 @@ function expectOrder(name, content, first, second) {
   });
 }
 
+function expectCount(name, content, needle, count) {
+  const actual = content.split(needle).length - 1;
+  checks.push({
+    name,
+    pass: actual === count,
+    expected: `${count} occurrences of ${needle}; found ${actual}`,
+  });
+}
+
 const app = stripComments(read('src/App.jsx'));
 const navbar = stripComments(read('src/components/Navbar.jsx'));
 const founders = stripComments(read('src/components/Fundadores.jsx'));
@@ -57,6 +66,17 @@ expectIncludes('Radar CTA text exists', sections, 'Conhecer o Radar');
 expectIncludes('Research CTA text exists', sections, 'Explorar Research');
 expectIncludes('Radar editorial card title exists', sections, 'Sinais que mudam a operação antes da manchete');
 expectIncludes('Research editorial card title exists', sections, 'Da academia para decisões de produto, operação e mercado');
+expectIncludes('Sections render configured ids', sections, 'id={section.id}');
+expectIncludes('Sections render configured themes', sections, 'data-theme={section.theme}');
+expectIncludes('Sections render configured labels', sections, '{section.label}');
+expectIncludes('Sections render configured eyebrow copy', sections, '{section.eyebrow}');
+expectIncludes('Sections render configured titles', sections, '{section.title}');
+expectIncludes('Sections render configured body copy', sections, '{section.body}');
+expectCount('Configured href is wired to desktop CTA, card, and mobile CTA', sections, 'href={section.href}', 3);
+expectIncludes('Card renders configured title', sections, '{section.card.title}');
+expectIncludes('Card renders configured excerpt', sections, '{section.card.excerpt}');
+expectIncludes('Card accessible label includes editorial title', sections, 'aria-label={`${section.cta}: ${section.card.title}`}');
+expectOrder('Mobile CTA is rendered after editorial card', sections, 'aria-label={`${section.cta}: ${section.card.title}`}', 'lg:hidden');
 
 expectNotIncludes('Public component does not mention UFF', sections, 'UFF');
 expectNotIncludes('Component does not keep static source-check comments', rawSections, '// id="radar"');

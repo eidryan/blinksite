@@ -86,10 +86,14 @@ Use the "Radar -> Research as a knowledge journey" approach, but split across se
 - 2026-06-27 restart completed around the approved `Janela Editorial Blink` direction.
 - Replaced the overbuilt pinned/glass-stacking Radar/Research treatment with two separate editorial destination windows.
 - Preserved visible sequence labels: `04. Radar`, `05. Research`, `06. Fundadores`, and corrected footer contact to `07. Contato`.
-- Tightened `scripts/verify-home-radar-research.mjs` to protect labels, destinations, approved copy, no UFF copy, no sticky pinning, no `h-screen`, no blur-stacking, and contact numbering.
-- Verified with `npm run verify:home-radar-research` (`30 checks`).
-- Verified with `npx eslint src/components/RadarResearchSections.jsx src/components/Footer.jsx scripts/verify-home-radar-research.mjs`.
+- Post-review fix: card links now expose accessible names with CTA plus editorial title, instead of repeating only the generic CTA.
+- Post-review fix: `scripts/verify-home-radar-research.mjs` now checks JSX wiring for ids, themes, labels, body copy, card title/excerpt, href usage, accessible card labels, and mobile CTA source order.
+- Post-review cleanup: `scripts/verify-scroll-behavior.mjs` now validates normal non-pinned scroll behavior for Radar and Research across desktop/mobile.
+- Tightened `scripts/verify-home-radar-research.mjs` to protect labels, destinations, approved copy, no UFF copy, no sticky pinning, no `h-screen`, no blur-stacking, contact numbering, and rendered JSX wiring.
+- Verified with `npm run verify:home-radar-research` (`41 checks`).
+- Verified with `npx eslint src/components/RadarResearchSections.jsx src/components/Footer.jsx scripts/verify-home-radar-research.mjs scripts/verify-scroll-behavior.mjs`.
 - Verified with `npm run build`; Vite still reports the existing chunk-size warning after a successful build.
+- Verified with `node scripts/verify-scroll-behavior.mjs`; rerun required elevated local-port/browser access after sandbox blocked binding `::1:5173`.
 - Browser-reviewed `#radar` and `#research` at 390x844 and 1440x900: labels and CTAs are visible in the intended breakpoints, Radar/Research have no internal horizontal overflow, and `/radar`/`/research` links remain intact.
 
 - Design spec written: `docs/superpowers/specs/2026-06-26-blink-home-radar-research-design.md`.

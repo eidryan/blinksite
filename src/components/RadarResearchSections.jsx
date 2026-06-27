@@ -195,7 +195,7 @@ export default function RadarResearchSections() {
                                     : 'border-dark/10 bg-[#FFF8EA]/80 text-dark shadow-orange/10 focus-visible:ring-offset-cream'
                                     }`}
                                 style={{ transformStyle: 'preserve-3d' }}
-                                aria-label={section.cta}
+                                aria-label={`${section.cta}: ${section.card.title}`}
                             >
                                 <div className="relative aspect-[16/9] overflow-hidden">
                                     <Cover className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105" />

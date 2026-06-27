@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function Footer() {
     const whatsappHref = 'https://wa.me/5521990230538?text=Oi%2C%20tenho%20interesse%20na%20Blink.';
     const linkedInHref = 'https://www.linkedin.com/company/blinkbr';
@@ -18,7 +16,7 @@ export default function Footer() {
                 <div>
                     <div className="flex justify-between items-start mb-16">
                         <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1">
-                            05. Contato
+                            07. Contato
                         </span>
                         {/* Origami Arrow Easter Egg */}
                         <div className="w-6 h-6 opacity-60 animate-[breathe_6s_infinite] origin-center -rotate-45" style={{ perspective: '300px' }}>
@@ -85,4 +83,3 @@ export default function Footer() {
         </footer>
     );
 }
-

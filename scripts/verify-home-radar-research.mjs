@@ -34,6 +34,7 @@ function expectOrder(name, content, first, second) {
 const app = stripComments(read('src/App.jsx'));
 const navbar = stripComments(read('src/components/Navbar.jsx'));
 const founders = stripComments(read('src/components/Fundadores.jsx'));
+const footer = stripComments(read('src/components/Footer.jsx'));
 const sectionsPath = 'src/components/RadarResearchSections.jsx';
 const rawSections = read(sectionsPath);
 const sections = stripComments(rawSections);
@@ -69,6 +70,8 @@ expectIncludes('Navbar Research anchor exists', navbar, "{ name: 'Research', hre
 expectOrder('Navbar order puts Radar before Research', navbar, "{ name: 'Radar', href: '#radar' }", "{ name: 'Research', href: '#research' }");
 expectIncludes('Founders label is renumbered', founders, '06. Fundadores');
 expectNotIncludes('Old founders label is removed', founders, '04. Fundadores');
+expectIncludes('Footer contact label follows founders', footer, '07. Contato');
+expectNotIncludes('Old contact label is removed', footer, '05. Contato');
 
 const failed = checks.filter((check) => !check.pass);
 

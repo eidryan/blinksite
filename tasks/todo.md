@@ -24,7 +24,7 @@
 - [x] Tighten `scripts/verify-home-radar-research.mjs` so it protects visible `04. Radar` and `05. Research` labels again.
 - [x] Redesign `src/components/RadarResearchSections.jsx` around separate section headers plus a compact editorial window card for each destination.
 - [x] Remove the sticky pin/blur stacking behavior and keep motion to section reveal, card tilt, and card hover only.
-- [x] Verify with source checks and production build.
+- [x] Verify with source checks, production build, and desktop/mobile browser review.
 
 ## Current Recovery Findings
 
@@ -82,6 +82,15 @@ Use the "Radar -> Research as a knowledge journey" approach, but split across se
 - The sections should sit after `Portfolio` and before `Fundadores`.
 
 ## Review
+
+- 2026-06-27 restart completed around the approved `Janela Editorial Blink` direction.
+- Replaced the overbuilt pinned/glass-stacking Radar/Research treatment with two separate editorial destination windows.
+- Preserved visible sequence labels: `04. Radar`, `05. Research`, `06. Fundadores`, and corrected footer contact to `07. Contato`.
+- Tightened `scripts/verify-home-radar-research.mjs` to protect labels, destinations, approved copy, no UFF copy, no sticky pinning, no `h-screen`, no blur-stacking, and contact numbering.
+- Verified with `npm run verify:home-radar-research` (`30 checks`).
+- Verified with `npx eslint src/components/RadarResearchSections.jsx src/components/Footer.jsx scripts/verify-home-radar-research.mjs`.
+- Verified with `npm run build`; Vite still reports the existing chunk-size warning after a successful build.
+- Browser-reviewed `#radar` and `#research` at 390x844 and 1440x900: labels and CTAs are visible in the intended breakpoints, Radar/Research have no internal horizontal overflow, and `/radar`/`/research` links remain intact.
 
 - Design spec written: `docs/superpowers/specs/2026-06-26-blink-home-radar-research-design.md`.
 - Gemini execution plan written: `docs/superpowers/plans/2026-06-26-blink-home-radar-research-gemini.md`.

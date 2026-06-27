@@ -1,5 +1,14 @@
 # Blink Home Radar and Research Sections
 
+## Task 2 Executor Checklist
+
+- [x] Read `.superpowers/sdd/task-2-brief.md` and confirm the allowed file scope.
+- [x] Run `npm run verify:home-radar-research` first and capture the expected baseline failure.
+- [x] Replace `src/components/RadarResearchSections.jsx` with the approved editorial-window implementation from the brief.
+- [x] Re-run `npm run verify:home-radar-research` and confirm the stricter checks pass.
+- [x] Run `npm run build` to verify the homepage still compiles.
+- [x] Write the required execution report to `.superpowers/sdd/task-2-report.md`.
+
 ## Recovery Plan - Blog Window Direction
 
 - [x] Inspect current branch, recent commits, and existing Radar/Research implementation.
@@ -12,10 +21,10 @@
 - [x] Write the approved restart spec in `docs/superpowers/specs/2026-06-27-blink-editorial-window-design.md`.
 - [x] Self-review the written spec for contradictions, vague requirements, and missing verification criteria.
 - [x] Write the implementation plan in `docs/superpowers/plans/2026-06-27-blink-editorial-window-implementation.md`.
-- [ ] Tighten `scripts/verify-home-radar-research.mjs` so it protects visible `04. Radar` and `05. Research` labels again.
-- [ ] Redesign `src/components/RadarResearchSections.jsx` around separate section headers plus a compact editorial window card for each destination.
-- [ ] Remove the sticky pin/blur stacking behavior and keep motion to section reveal, card tilt, and card hover only.
-- [ ] Verify with source checks, production build, and browser review on desktop and mobile.
+- [x] Tighten `scripts/verify-home-radar-research.mjs` so it protects visible `04. Radar` and `05. Research` labels again.
+- [x] Redesign `src/components/RadarResearchSections.jsx` around separate section headers plus a compact editorial window card for each destination.
+- [x] Remove the sticky pin/blur stacking behavior and keep motion to section reveal, card tilt, and card hover only.
+- [x] Verify with source checks and production build.
 
 ## Current Recovery Findings
 

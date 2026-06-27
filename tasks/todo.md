@@ -11,6 +11,7 @@
 - [x] Validate the detailed "Janela Editorial Blink" design before writing the spec.
 - [x] Write the approved restart spec in `docs/superpowers/specs/2026-06-27-blink-editorial-window-design.md`.
 - [x] Self-review the written spec for contradictions, vague requirements, and missing verification criteria.
+- [x] Write the implementation plan in `docs/superpowers/plans/2026-06-27-blink-editorial-window-implementation.md`.
 - [ ] Tighten `scripts/verify-home-radar-research.mjs` so it protects visible `04. Radar` and `05. Research` labels again.
 - [ ] Redesign `src/components/RadarResearchSections.jsx` around separate section headers plus a compact editorial window card for each destination.
 - [ ] Remove the sticky pin/blur stacking behavior and keep motion to section reveal, card tilt, and card hover only.

@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, BookOpenText, Clock, RadioTower } from 'lucide-react';
 import RadarIllustration from './illustrations/RadarIllustration';
 import ResearchIllustration from './illustrations/ResearchIllustration';
+import { fetchLatestRadarPost } from '../lib/latestRadarPost';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -51,6 +52,7 @@ const contentSections = [
 export default function RadarResearchSections() {
     const sectionRefs = useRef([]);
     const cardRefs = useRef([]);
+    const [latestRadarPost, setLatestRadarPost] = useState(null);
 
     useEffect(() => {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -85,6 +87,26 @@ export default function RadarResearchSections() {
         });
 
         return () => ctx.revert();
+    }, []);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        fetchLatestRadarPost()
+            .then((post) => {
+                if (!cancelled && post) {
+                    setLatestRadarPost(post);
+                }
+            })
+            .catch(() => {
+                if (!cancelled) {
+                    setLatestRadarPost(null);
+                }
+            });
+
+        return () => {
+            cancelled = true;
+        };
     }, []);
 
     const handleMouseMove = (event, index) => {
@@ -126,6 +148,12 @@ export default function RadarResearchSections() {
                 const isReversed = section.id === 'research';
                 const Icon = section.icon;
                 const Cover = section.card.Cover;
+                const latestCard = section.id === 'radar' && latestRadarPost
+                    ? { ...section.card, ...latestRadarPost }
+                    : section.card;
+                const cardHref = section.id === 'radar' && latestRadarPost ? latestRadarPost.href : section.href;
+                const cardCta = section.id === 'radar' && latestRadarPost ? 'Ler no Radar' : section.cta;
+                const cardEyebrow = section.id === 'radar' && latestRadarPost ? latestRadarPost.meta : section.eyebrow;
 
                 return (
                     <section
@@ -186,7 +214,7 @@ export default function RadarResearchSections() {
                             <a
                                 ref={(element) => { cardRefs.current[index] = element; }}
                                 data-editorial-reveal
-                                href={section.href}
+                                href={cardHref}
                                 data-cursor="action"
                                 onMouseMove={(event) => handleMouseMove(event, index)}
                                 onMouseLeave={() => handleMouseLeave(index)}
@@ -195,14 +223,14 @@ export default function RadarResearchSections() {
                                     : 'border-dark/10 bg-[#FFF8EA]/80 text-dark shadow-orange/10 focus-visible:ring-offset-cream'
                                     }`}
                                 style={{ transformStyle: 'preserve-3d' }}
-                                aria-label={`${section.cta}: ${section.card.title}`}
+                                aria-label={`${cardCta}: ${latestCard.title}`}
                             >
                                 <div className="relative aspect-[16/9] overflow-hidden">
                                     <Cover className="h-full w-full transition-transform duration-700 ease-out group-hover:scale-105" />
                                     <div className={`absolute inset-0 bg-gradient-to-t transition-opacity duration-300 group-hover:opacity-50 ${isDark ? 'from-dark/88 via-dark/20 to-transparent opacity-70' : 'from-cream/88 via-cream/20 to-transparent opacity-75'}`} />
 
                                     <div className="absolute bottom-4 left-4 flex flex-wrap gap-2 pr-4">
-                                        {section.card.tags.map((tag) => (
+                                        {latestCard.tags.map((tag) => (
                                             <span
                                                 key={tag}
                                                 className={`rounded-full border px-3 py-1 font-mono text-[0.65rem] uppercase tracking-widest backdrop-blur-sm ${isDark
@@ -217,7 +245,7 @@ export default function RadarResearchSections() {
 
                                     <div className="absolute inset-0 flex items-center justify-center bg-dark/30 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                                         <span className="inline-flex translate-y-3 items-center gap-2 rounded-full brand-gradient px-6 py-3 font-body text-sm font-semibold text-dark shadow-lg shadow-orange/20 transition-transform duration-300 group-hover:translate-y-0 group-focus-visible:translate-y-0">
-                                            {section.cta}
+                                            {cardCta}
                                             <ArrowUpRight size={16} strokeWidth={2} />
                                         </span>
                                     </div>
@@ -229,28 +257,28 @@ export default function RadarResearchSections() {
                                             <Icon size={20} strokeWidth={1.7} />
                                         </span>
                                         <span className={`font-mono text-[0.68rem] uppercase tracking-[0.18em] ${isDark ? 'text-cream/55' : 'text-dark/55'}`}>
-                                            {section.eyebrow}
+                                            {cardEyebrow}
                                         </span>
                                     </div>
 
                                     <h3 className={`font-display text-2xl font-semibold leading-tight transition-colors duration-200 md:text-3xl ${isDark ? 'text-cream group-hover:text-orange' : 'text-dark group-hover:text-orange'}`}>
-                                        {section.card.title}
+                                        {latestCard.title}
                                     </h3>
 
                                     <p className={`mt-4 font-body text-sm leading-relaxed md:text-base ${isDark ? 'text-cream/66' : 'text-dark/66'}`}>
-                                        {section.card.excerpt}
+                                        {latestCard.excerpt}
                                     </p>
 
                                     <div className={`mt-6 flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-between ${isDark ? 'border-white/10' : 'border-dark/10'}`}>
                                         <div>
                                             <p className={`font-body text-xs font-semibold uppercase tracking-[0.18em] ${isDark ? 'text-cream/50' : 'text-dark/50'}`}>
-                                                {section.card.source}
+                                                {latestCard.source}
                                             </p>
                                         </div>
 
                                         <div className={`inline-flex items-center gap-2 font-body text-sm ${isDark ? 'text-cream/60' : 'text-dark/60'}`}>
                                             <Clock size={16} strokeWidth={1.8} />
-                                            <span>{section.card.readTime}</span>
+                                            <span>{latestCard.readTime}</span>
                                         </div>
                                     </div>
                                 </div>

@@ -1,5 +1,16 @@
 # Blink Home Radar and Research Sections
 
+## Latest Radar Card Plan
+
+- [x] Confirm current `blink-press` source of truth and live latest Radar post.
+- [x] Choose the structured JSON endpoint design instead of scraping `/radar` HTML.
+- [x] Write implementation plan for `blink-hub` latest endpoint plus `blinksite` card integration.
+- [x] Add and test the `blink-hub` latest-post helper against existing Radar fixtures.
+- [x] Add the `blinksite` latest-post fetch helper, Vercel rewrite, component wiring, and source verifier checks.
+- [x] Verify the `blinksite` source checks, targeted ESLint, and production build.
+- [x] Create `blink-press/app/api/radar/latest/route.ts` after writable access allowed creating the new `app/api/radar/latest` directory.
+- [x] Verify the actual JSON endpoint and browser-visible homepage card against the local `blink-press` server.
+
 ## Task 2 Executor Checklist
 
 - [x] Read `.superpowers/sdd/task-2-brief.md` and confirm the allowed file scope.
@@ -83,6 +94,10 @@ Use the "Radar -> Research as a knowledge journey" approach, but split across se
 
 ## Review
 
+- 2026-06-28 latest Radar card work is partially implemented: `blinksite` now fetches `/api/radar/latest`, normalizes the payload, and uses the latest post only for the Radar card while preserving static fallback and standalone CTAs.
+- `blink-press` helper/test work is present in the adjacent checkout and passes `npm test`; the route handler now exists at `app/api/radar/latest/route.ts`.
+- Verified latest Radar work with `npm run verify:home-radar-research`, targeted ESLint, `npm run build`, and `blink-press` `npm test` plus `npm run build`; the `blink-press` build route list now includes `/api/radar/latest`.
+- Runtime QA confirmed `GET http://127.0.0.1:3000/api/radar/latest` returns 200 JSON with the latest published Radar post, and `http://127.0.0.1:5175/#radar` renders that post in the Radar card while standalone CTAs still point to `/radar`.
 - 2026-06-27 restart completed around the approved `Janela Editorial Blink` direction.
 - Replaced the overbuilt pinned/glass-stacking Radar/Research treatment with two separate editorial destination windows.
 - Preserved visible sequence labels: `04. Radar`, `05. Research`, `06. Fundadores`, and corrected footer contact to `07. Contato`.

@@ -86,7 +86,7 @@ export default function Fundadores() {
             <div className="max-w-7xl mx-auto">
 
                 <span className="font-mono text-xs uppercase tracking-widest text-orange border border-orange/40 rounded-full px-3 py-1 inline-block mb-12">
-                    04. Fundadores
+                    06. Fundadores
                 </span>
 
                 <h2 className="font-display font-semibold text-4xl lg:text-5xl mb-20" style={{ textWrap: 'balance' }}>

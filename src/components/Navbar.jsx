@@ -42,9 +42,9 @@ export default function Navbar() {
         { name: 'Sobre', href: '#sobre' },
         { name: 'Como Atuamos', href: '#como-atuamos' },
         { name: 'Portfólio', href: '#portfolio' },
+        { name: 'Radar', href: '#radar' },
+        { name: 'Research', href: '#research' },
         { name: 'Fundadores', href: '#fundadores' },
-        { name: 'Radar', href: '/radar' },
-        { name: 'Research', href: '/research' },
         { name: 'Contato', href: '#contato' },
     ];
 

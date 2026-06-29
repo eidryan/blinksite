@@ -8,6 +8,7 @@
     { "source": "/research", "destination": "https://blink-press-blinkgroup.vercel.app/research" },
     { "source": "/research/:path*", "destination": "https://blink-press-blinkgroup.vercel.app/research/:path*" },
     { "source": "/_next/:path*", "destination": "https://blink-press-blinkgroup.vercel.app/_next/:path*" },
+    { "source": "/api/radar/latest", "destination": "https://blink-press-blinkgroup.vercel.app/api/radar/latest" },
     { "source": "/api/newsletter", "destination": "https://blink-press-blinkgroup.vercel.app/api/newsletter" },
     { "source": "/sitemap.xml", "destination": "https://blink-press-blinkgroup.vercel.app/sitemap.xml" }
   ],

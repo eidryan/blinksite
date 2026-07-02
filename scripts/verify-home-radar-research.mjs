@@ -80,7 +80,7 @@ expectIncludes('Card renders resolved excerpt', sections, '{latestCard.excerpt}'
 expectIncludes('Card accessible label includes resolved editorial title', sections, 'aria-label={`${cardCta}: ${latestCard.title}`}');
 expectOrder('Mobile CTA is rendered after editorial card', sections, 'aria-label={`${cardCta}: ${latestCard.title}`}', 'lg:hidden');
 expectIncludes('Latest Radar API rewrite exists', vercel, '"/api/radar/latest"');
-expectIncludes('Latest Radar rewrite targets blink-press', vercel, '"https://blink-press-blinkgroup.vercel.app/api/radar/latest"');
+expectIncludes('Latest Radar rewrite uses SEO proxy', vercel, '"/api/press-proxy?path=api/radar/latest"');
 expectIncludes('Latest Radar helper exports fetch function', latestRadar, 'export async function fetchLatestRadarPost()');
 expectIncludes('Latest Radar helper validates payload', latestRadar, 'export function normalizeLatestRadarPost(payload)');
 expectIncludes('Latest Radar helper supports local QA override', latestRadar, 'VITE_RADAR_LATEST_URL');

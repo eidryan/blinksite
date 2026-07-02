@@ -2,15 +2,30 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.blinkgroup.com.br" }],
+      "destination": "https://blinkgroup.com.br/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.blinkgroup.com.br" }],
+      "destination": "https://blinkgroup.com.br/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    { "source": "/radar", "destination": "https://blink-press-blinkgroup.vercel.app/radar" },
-    { "source": "/radar/:path*", "destination": "https://blink-press-blinkgroup.vercel.app/radar/:path*" },
-    { "source": "/research", "destination": "https://blink-press-blinkgroup.vercel.app/research" },
-    { "source": "/research/:path*", "destination": "https://blink-press-blinkgroup.vercel.app/research/:path*" },
+    { "source": "/radar", "destination": "/api/press-proxy?path=radar" },
+    { "source": "/radar/:path*", "destination": "/api/press-proxy?path=radar/:path*" },
+    { "source": "/research", "destination": "/api/press-proxy?path=research" },
+    { "source": "/research/:path*", "destination": "/api/press-proxy?path=research/:path*" },
     { "source": "/_next/:path*", "destination": "https://blink-press-blinkgroup.vercel.app/_next/:path*" },
-    { "source": "/api/radar/latest", "destination": "https://blink-press-blinkgroup.vercel.app/api/radar/latest" },
+    { "source": "/api/radar/latest", "destination": "/api/press-proxy?path=api/radar/latest" },
     { "source": "/api/newsletter", "destination": "https://blink-press-blinkgroup.vercel.app/api/newsletter" },
-    { "source": "/sitemap.xml", "destination": "https://blink-press-blinkgroup.vercel.app/sitemap.xml" }
+    { "source": "/sitemap.xml", "destination": "/api/press-proxy?path=sitemap.xml" },
+    { "source": "/robots.txt", "destination": "/api/press-proxy?path=robots.txt" }
   ],
   "headers": [
     {

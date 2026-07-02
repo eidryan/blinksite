@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import handler, {
   addCanonicalHomeToSitemap,
   buildUpstreamUrl,
@@ -198,6 +198,14 @@ function verifyRouteMap() {
   }
 }
 
+function verifyFaviconSurface() {
+  check('Root favicon.ico asset exists for proxied Blink Press pages', existsSync('public/favicon.ico'), 'public/favicon.ico');
+
+  if (existsSync('public/favicon.ico')) {
+    check('Root favicon.ico asset is non-empty', statSync('public/favicon.ico').size > 0, 'non-empty favicon.ico');
+  }
+}
+
 function verifyHelpers() {
   check('Allows /radar', normalizePressPath('/radar') === 'radar', 'radar');
   check('Allows /research slug', normalizePressPath('/research/paper') === 'research/paper', 'research/paper');
@@ -223,6 +231,7 @@ function verifyHelpers() {
 }
 
 verifyHelpers();
+verifyFaviconSurface();
 verifyRouteMap();
 await verifyProxyBehavior();
 await verifyForbiddenPath();

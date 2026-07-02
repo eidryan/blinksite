@@ -1,5 +1,30 @@
 # Organic SEO Pages Diagnosis - 2026-06-30
 
+## Radar/Research Favicon Fix - 2026-07-02
+
+- [x] Confirm why the Blink logo appears on the home page but disappears on `/radar` and `/research`.
+- [x] Add a source verification check that protects the root `/favicon.ico` path required by proxied Blink Press pages.
+- [x] Add the Blink favicon ICO asset to the `blinksite` public output.
+- [x] Verify source checks, build output, and favicon file shape.
+- [x] Document the final result.
+
+## Radar/Research Favicon Findings
+
+- Production `/radar` HTML includes `<link rel="icon" href="/favicon.ico?...">`.
+- Production `https://blinkgroup.com.br/favicon.ico` returns `404`.
+- Production `https://blinkgroup.com.br/favicon.png` returns `200`, which explains why the Vite home page can show the logo while proxied Blink Press pages cannot.
+
+## Radar/Research Favicon Review
+
+- Added `public/favicon.ico`, generated from the existing Blink `public/favicon.png` rather than copying the unrelated `blink-press/app/favicon.ico`.
+- Updated `scripts/verify-seo-surface.mjs` so `npm run verify:seo` fails if the root ICO asset required by proxied Blink Press pages is missing.
+- Confirmed TDD red state first: `npm run verify:seo` failed with `Root favicon.ico asset exists for proxied Blink Press pages`.
+- Confirmed green state: `npm run verify:seo` passed with `47 checks`.
+- Confirmed targeted lint: `npx eslint scripts/verify-seo-surface.mjs` passed.
+- Confirmed production build: `npm run build` passed with the existing Vite chunk-size warning.
+- Confirmed built output: `dist/favicon.ico` is a valid Windows icon resource with 16, 32, 48, and 256px entries.
+- Confirmed local preview: `GET /favicon.ico` returns `200` with `Content-Type: image/x-icon`.
+
 ## Domain Readiness Plan - 2026-07-01
 
 - [x] Confirm the local `blinksite` checkout is linked to the intended Vercel project/team.

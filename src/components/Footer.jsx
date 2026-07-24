@@ -1,6 +1,7 @@
 export default function Footer() {
     const whatsappHref = 'https://wa.me/5521990230538?text=Oi%2C%20tenho%20interesse%20na%20Blink.';
     const linkedInHref = 'https://www.linkedin.com/company/blinkbr';
+    const instagramHref = 'https://www.instagram.com/blinkgroup.br/';
 
     return (
         <footer
@@ -70,6 +71,15 @@ export default function Footer() {
                             className="hover:text-orange transition-colors"
                         >
                             LinkedIn
+                        </a>
+                        <a
+                            href={instagramHref}
+                            target="_blank"
+                            rel="noreferrer"
+                            data-cursor="link"
+                            className="hover:text-orange transition-colors"
+                        >
+                            Instagram
                         </a>
                     </div>
                 </div>

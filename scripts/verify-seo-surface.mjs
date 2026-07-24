@@ -198,6 +198,31 @@ function verifyRouteMap() {
   }
 }
 
+function verifyHomeHeadMetadata() {
+  const html = readFileSync('index.html', 'utf8');
+
+  check('Home title is not the bare brand name', /<title>(.+)<\/title>/.test(html) && html.match(/<title>(.+)<\/title>/)[1].trim() !== 'Blink', 'descriptive <title>');
+  check('Home has a meta description', /<meta\s+name="description"\s+content="[^"]{20,}"/.test(html), 'non-empty meta description');
+
+  const ldJsonMatch = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  check('Home has a JSON-LD block', Boolean(ldJsonMatch), 'application/ld+json script present');
+
+  if (ldJsonMatch) {
+    let schema;
+    try {
+      schema = JSON.parse(ldJsonMatch[1]);
+    } catch {
+      schema = null;
+    }
+
+    check('Home JSON-LD is valid JSON', Boolean(schema), 'parseable JSON-LD');
+    check('Home JSON-LD declares an Organization', schema?.['@type'] === 'Organization', '@type Organization');
+    check('Home JSON-LD has a name', typeof schema?.name === 'string' && schema.name.length > 0, 'non-empty name');
+    check('Home JSON-LD has the canonical url', schema?.url === 'https://blinkgroup.com.br', 'https://blinkgroup.com.br');
+    check('Home JSON-LD sameAs includes LinkedIn', Array.isArray(schema?.sameAs) && schema.sameAs.some((url) => url.includes('linkedin.com')), 'linkedin.com URL in sameAs');
+  }
+}
+
 function verifyFaviconSurface() {
   check('Root favicon.ico asset exists for proxied Blink Press pages', existsSync('public/favicon.ico'), 'public/favicon.ico');
 
@@ -231,6 +256,7 @@ function verifyHelpers() {
 }
 
 verifyHelpers();
+verifyHomeHeadMetadata();
 verifyFaviconSurface();
 verifyRouteMap();
 await verifyProxyBehavior();

@@ -86,7 +86,7 @@ export default function Fundadores() {
                 </h2>
 
                 {/* Founder cards - vertical layout */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-12 max-w-4xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 lg:gap-12 max-w-4xl mx-auto">
                     {founders.map((founder, i) => (
                         <div
                             key={i}
